@@ -15,5 +15,6 @@ class Player {
 	// id number
 	// name
 	// board
+	// score
 	
 }

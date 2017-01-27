@@ -10,10 +10,15 @@ import Foundation
 
 
 /// State of the entire game state?
-class Game {
+struct Game {
 	
 	// players
+	// level / speed modifier
 	
+	init() {
+		// clear boards
+		// reset scores
+	}
 }
 
 
