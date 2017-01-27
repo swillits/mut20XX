@@ -23,7 +23,24 @@
 		5D849AB21E3BB7DE0027AF00 /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB11E3BB7DE0027AF00 /* Input.swift */; };
 		5D849AB41E3BB8080027AF00 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB31E3BB8080027AF00 /* Player.swift */; };
 		5D849AB61E3BC7180027AF00 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB51E3BC7180027AF00 /* Audio.swift */; };
-		5D849AB81E3BD47E0027AF00 /* Styleguide.md in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB71E3BD47E0027AF00 /* Styleguide.md */; };
+		5D849AB81E3BD47E0027AF00 /* Styleguide.txt in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB71E3BD47E0027AF00 /* Styleguide.txt */; };
+		5D849ABA1E3BDC570027AF00 /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AB91E3BDC570027AF00 /* Notes.txt */; };
+		5D849ACE1E3BE6100027AF00 /* ButtonClick.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ABE1E3BE6100027AF00 /* ButtonClick.m4a */; };
+		5D849ACF1E3BE6100027AF00 /* ButtonHover.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ABF1E3BE6100027AF00 /* ButtonHover.m4a */; };
+		5D849AD01E3BE6100027AF00 /* ButtonRelease.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AC01E3BE6100027AF00 /* ButtonRelease.m4a */; };
+		5D849AD11E3BE6100027AF00 /* CompleteFourLines.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AC11E3BE6100027AF00 /* CompleteFourLines.m4a */; };
+		5D849AD21E3BE6100027AF00 /* CompleteLine.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AC21E3BE6100027AF00 /* CompleteLine.m4a */; };
+		5D849AD31E3BE6100027AF00 /* DropBlock.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AC31E3BE6100027AF00 /* DropBlock.m4a */; };
+		5D849AD41E3BE6100027AF00 /* Explosion.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AC41E3BE6100027AF00 /* Explosion.m4a */; };
+		5D849AD51E3BE6100027AF00 /* GameOver.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AC51E3BE6100027AF00 /* GameOver.m4a */; };
+		5D849AD61E3BE6100027AF00 /* MoveBlock.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AC61E3BE6100027AF00 /* MoveBlock.m4a */; };
+		5D849AD71E3BE6100027AF00 /* NewLevel.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AC71E3BE6100027AF00 /* NewLevel.m4a */; };
+		5D849AD81E3BE6100027AF00 /* RotateBlock.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AC81E3BE6100027AF00 /* RotateBlock.m4a */; };
+		5D849AD91E3BE6100027AF00 /* SuckLines.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AC91E3BE6100027AF00 /* SuckLines.m4a */; };
+		5D849ADA1E3BE6100027AF00 /* TetrisMusic1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ACA1E3BE6100027AF00 /* TetrisMusic1.m4a */; };
+		5D849ADB1E3BE6100027AF00 /* TetrisMusic2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ACB1E3BE6100027AF00 /* TetrisMusic2.m4a */; };
+		5D849ADC1E3BE6100027AF00 /* TetrisMusic3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ACC1E3BE6100027AF00 /* TetrisMusic3.m4a */; };
+		5D849ADD1E3BE6100027AF00 /* WonGame.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ACD1E3BE6100027AF00 /* WonGame.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +74,24 @@
 		5D849AB11E3BB7DE0027AF00 /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		5D849AB31E3BB8080027AF00 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		5D849AB51E3BC7180027AF00 /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
-		5D849AB71E3BD47E0027AF00 /* Styleguide.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Styleguide.md; sourceTree = "<group>"; usesTabs = 0; };
+		5D849AB71E3BD47E0027AF00 /* Styleguide.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Styleguide.txt; sourceTree = "<group>"; usesTabs = 0; };
+		5D849AB91E3BDC570027AF00 /* Notes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
+		5D849ABE1E3BE6100027AF00 /* ButtonClick.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ButtonClick.m4a; sourceTree = "<group>"; };
+		5D849ABF1E3BE6100027AF00 /* ButtonHover.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ButtonHover.m4a; sourceTree = "<group>"; };
+		5D849AC01E3BE6100027AF00 /* ButtonRelease.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ButtonRelease.m4a; sourceTree = "<group>"; };
+		5D849AC11E3BE6100027AF00 /* CompleteFourLines.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = CompleteFourLines.m4a; sourceTree = "<group>"; };
+		5D849AC21E3BE6100027AF00 /* CompleteLine.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = CompleteLine.m4a; sourceTree = "<group>"; };
+		5D849AC31E3BE6100027AF00 /* DropBlock.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = DropBlock.m4a; sourceTree = "<group>"; };
+		5D849AC41E3BE6100027AF00 /* Explosion.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = Explosion.m4a; sourceTree = "<group>"; };
+		5D849AC51E3BE6100027AF00 /* GameOver.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = GameOver.m4a; sourceTree = "<group>"; };
+		5D849AC61E3BE6100027AF00 /* MoveBlock.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = MoveBlock.m4a; sourceTree = "<group>"; };
+		5D849AC71E3BE6100027AF00 /* NewLevel.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = NewLevel.m4a; sourceTree = "<group>"; };
+		5D849AC81E3BE6100027AF00 /* RotateBlock.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = RotateBlock.m4a; sourceTree = "<group>"; };
+		5D849AC91E3BE6100027AF00 /* SuckLines.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = SuckLines.m4a; sourceTree = "<group>"; };
+		5D849ACA1E3BE6100027AF00 /* TetrisMusic1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = TetrisMusic1.m4a; sourceTree = "<group>"; };
+		5D849ACB1E3BE6100027AF00 /* TetrisMusic2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = TetrisMusic2.m4a; sourceTree = "<group>"; };
+		5D849ACC1E3BE6100027AF00 /* TetrisMusic3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = TetrisMusic3.m4a; sourceTree = "<group>"; };
+		5D849ACD1E3BE6100027AF00 /* WonGame.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = WonGame.m4a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +115,8 @@
 		5D849A731E3BB1260027AF00 = {
 			isa = PBXGroup;
 			children = (
-				5D849AB71E3BD47E0027AF00 /* Styleguide.md */,
+				5D849AB71E3BD47E0027AF00 /* Styleguide.txt */,
+				5D849AB91E3BDC570027AF00 /* Notes.txt */,
 				5D849AA41E3BB1CE0027AF00 /* Top Level */,
 				5D849AA21E3BB1A50027AF00 /* Models */,
 				5D849A7E1E3BB1260027AF00 /* Game */,
@@ -140,6 +175,7 @@
 		5D849AA31E3BB1BA0027AF00 /* App Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5D849ABD1E3BE6100027AF00 /* Sounds */,
 				5D849A891E3BB1260027AF00 /* Assets.xcassets */,
 				5D849A8E1E3BB1260027AF00 /* Info.plist */,
 			);
@@ -172,6 +208,30 @@
 			);
 			name = Support;
 			path = Game;
+			sourceTree = "<group>";
+		};
+		5D849ABD1E3BE6100027AF00 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				5D849ABE1E3BE6100027AF00 /* ButtonClick.m4a */,
+				5D849ABF1E3BE6100027AF00 /* ButtonHover.m4a */,
+				5D849AC01E3BE6100027AF00 /* ButtonRelease.m4a */,
+				5D849AC11E3BE6100027AF00 /* CompleteFourLines.m4a */,
+				5D849AC21E3BE6100027AF00 /* CompleteLine.m4a */,
+				5D849AC31E3BE6100027AF00 /* DropBlock.m4a */,
+				5D849AC41E3BE6100027AF00 /* Explosion.m4a */,
+				5D849AC51E3BE6100027AF00 /* GameOver.m4a */,
+				5D849AC61E3BE6100027AF00 /* MoveBlock.m4a */,
+				5D849AC71E3BE6100027AF00 /* NewLevel.m4a */,
+				5D849AC81E3BE6100027AF00 /* RotateBlock.m4a */,
+				5D849AC91E3BE6100027AF00 /* SuckLines.m4a */,
+				5D849ACA1E3BE6100027AF00 /* TetrisMusic1.m4a */,
+				5D849ACB1E3BE6100027AF00 /* TetrisMusic2.m4a */,
+				5D849ACC1E3BE6100027AF00 /* TetrisMusic3.m4a */,
+				5D849ACD1E3BE6100027AF00 /* WonGame.m4a */,
+			);
+			name = Sounds;
+			path = Game/Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,10 +317,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D849ADB1E3BE6100027AF00 /* TetrisMusic2.m4a in Resources */,
+				5D849AD31E3BE6100027AF00 /* DropBlock.m4a in Resources */,
+				5D849AD61E3BE6100027AF00 /* MoveBlock.m4a in Resources */,
+				5D849AD91E3BE6100027AF00 /* SuckLines.m4a in Resources */,
 				5D849A821E3BB1260027AF00 /* GameScene.sks in Resources */,
+				5D849AD41E3BE6100027AF00 /* Explosion.m4a in Resources */,
+				5D849ACE1E3BE6100027AF00 /* ButtonClick.m4a in Resources */,
 				5D849A8A1E3BB1260027AF00 /* Assets.xcassets in Resources */,
+				5D849AD21E3BE6100027AF00 /* CompleteLine.m4a in Resources */,
+				5D849ACF1E3BE6100027AF00 /* ButtonHover.m4a in Resources */,
 				5D849A841E3BB1260027AF00 /* Actions.sks in Resources */,
+				5D849AD81E3BE6100027AF00 /* RotateBlock.m4a in Resources */,
 				5D849A8D1E3BB1260027AF00 /* Main.storyboard in Resources */,
+				5D849AD71E3BE6100027AF00 /* NewLevel.m4a in Resources */,
+				5D849AD11E3BE6100027AF00 /* CompleteFourLines.m4a in Resources */,
+				5D849ADD1E3BE6100027AF00 /* WonGame.m4a in Resources */,
+				5D849AD01E3BE6100027AF00 /* ButtonRelease.m4a in Resources */,
+				5D849ADA1E3BE6100027AF00 /* TetrisMusic1.m4a in Resources */,
+				5D849AD51E3BE6100027AF00 /* GameOver.m4a in Resources */,
+				5D849ABA1E3BDC570027AF00 /* Notes.txt in Resources */,
+				5D849ADC1E3BE6100027AF00 /* TetrisMusic3.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,7 +366,7 @@
 				5D849A801E3BB1260027AF00 /* AppDelegate.swift in Sources */,
 				5D849AB41E3BB8080027AF00 /* Player.swift in Sources */,
 				5D849AAF1E3BB7A40027AF00 /* Game.swift in Sources */,
-				5D849AB81E3BD47E0027AF00 /* Styleguide.md in Sources */,
+				5D849AB81E3BD47E0027AF00 /* Styleguide.txt in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

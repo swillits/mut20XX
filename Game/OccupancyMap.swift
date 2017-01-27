@@ -68,4 +68,5 @@ struct OccupancyMap {
 		guard !hitsSidesOrBottom(map: map, x: x, y: y) else { return true }
 		return false
 	}
+	
 }

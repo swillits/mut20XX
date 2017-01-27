@@ -16,5 +16,6 @@ class Player {
 	// name
 	// board
 	// score
+	// dead or alive
 	
 }

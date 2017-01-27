@@ -1,0 +1,32 @@
+
+
+Setup
+-----------
+A game board is 10 wide by 20 high.
+A multiplayer game has 2 to 5 players
+
+
+
+Rules
+-----------
+Classic: Players are in random "ring" formation. When a player clears lines away from their board, the same number of lines are added to the board of the player "on the right." The lines added are incomplete, with a single block missing from them. The last player to be alive wins.
+
+
+General Design
+-----------
+Each player has a board, a current piece, and next piece.
+A board is a simple occupancy grid of colored blocks.
+A piece is a a 4x4 grid of colored blocks in a particular shape.
+The current/falling piece is not part of the board, but entirely separate, until the piece either is placed by the player or collides and is placed by the game. At that point the blocks of the piece in the current position are copied into the board.
+
+
+
+Networking Model
+-----------
+Can a true peer-to-peer with low latency be done? Useful if the host drops out...
+
+Game state is communicated by simple replication commands. All BoardActions are replicated in reliable order. Since BoardActions can only originate from one source, those are always sent and received in a reliable order. Lines sent from one player to another can only be sent once (the same lines can't bet sent twice), transmission is reliable so they're only received once, and when they are received relative to other board actions doesn't matter because the lines are added to the bottom of the board which is always safe.
+
+(That's the theory, but something in the classic version got out of sync now and then, but that could have been unrelated to the networking model itself.)
+
+
