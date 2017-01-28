@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		024507361E3C902B00474C1C /* OccupancyMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024507351E3C902B00474C1C /* OccupancyMapTests.swift */; };
 		5D849A801E3BB1260027AF00 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849A7F1E3BB1260027AF00 /* AppDelegate.swift */; };
 		5D849A821E3BB1260027AF00 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5D849A811E3BB1260027AF00 /* GameScene.sks */; };
 		5D849A841E3BB1260027AF00 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5D849A831E3BB1260027AF00 /* Actions.sks */; };
@@ -54,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		024507351E3C902B00474C1C /* OccupancyMapTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OccupancyMapTests.swift; sourceTree = "<group>"; };
 		5D849A7C1E3BB1260027AF00 /* MUT20XX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MUT20XX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D849A7F1E3BB1260027AF00 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Game/AppDelegate.swift; sourceTree = "<group>"; };
 		5D849A811E3BB1260027AF00 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				5D849A971E3BB1270027AF00 /* MUT20XXTests.swift */,
+				024507351E3C902B00474C1C /* OccupancyMapTests.swift */,
 				5D849A991E3BB1270027AF00 /* Info.plist */,
 			);
 			name = MUT20XXTests;
@@ -374,6 +377,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				024507361E3C902B00474C1C /* OccupancyMapTests.swift in Sources */,
 				5D849A981E3BB1270027AF00 /* MUT20XXTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -525,7 +529,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = MUT20XXTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.idevgames.MUT20XXTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -540,7 +544,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = MUT20XXTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.idevgames.MUT20XXTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
