@@ -12,25 +12,59 @@ import Foundation
 
 struct Piece {
 	
+	var shape: Shape
 	var position: Position
 	var rotation: Rotation
 	
-	// variety: BlockVariety ? (or being in the occupancy map is enough)
-	// occupancy map (for a given rotation) 4 x 4 area
+	var occupancyMap: OccupancyMap {
+		return shape.occupancyMap.rotated(to: rotation)
+	}
 	
 	
 	
 	
 	enum Shape {
-		case line, block, leftL, rightL, z, s
-	}
-	
-	
-	enum Rotation: Int {
-		case a = 0, b = 1, c = 2, d = 3
+		case line, square, L, r, z, s
 		
-		func next() -> Rotation {
-			return Rotation(rawValue: (self.rawValue + 1) % 4)!
+		var occupancyMap: OccupancyMap {
+			switch self {
+			case .line:
+				return OccupancyMap(width: 4, height: 4,
+					nil, nil,  .a, nil,
+					nil, nil,  .a, nil,
+					nil, nil,  .a, nil,
+					nil, nil,  .a, nil)
+			case .square:
+				return OccupancyMap(width: 4, height: 4,
+					nil, nil, nil, nil,
+					nil,  .b,  .b, nil,
+					nil,  .b,  .b, nil,
+					nil, nil, nil, nil)
+			case .L:
+				return OccupancyMap(width: 4, height: 4,
+					nil,  .c, nil, nil,
+					nil,  .c, nil, nil,
+					nil,  .c,  .c, nil,
+					nil, nil, nil, nil)
+			case .r:
+				return OccupancyMap(width: 4, height: 4,
+					nil, nil,  .d, nil,
+					nil, nil,  .d, nil,
+					nil,  .d,  .d, nil,
+					nil, nil, nil, nil)
+			case .s:
+				return OccupancyMap(width: 4, height: 4,
+					nil, nil, nil, nil,
+					nil, nil,  .e,  .e,
+					nil,  .e,  .e, nil,
+					nil, nil, nil, nil)
+			case .z:
+				return OccupancyMap(width: 4, height: 4,
+					nil, nil, nil, nil,
+					 .f,  .f, nil, nil,
+					nil,  .f,  .f, nil,
+					nil, nil, nil, nil)
+			}
 		}
 	}
 	
