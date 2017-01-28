@@ -24,20 +24,23 @@ struct Piece {
 	
 	
 	enum Shape {
-		case line, square, L, r, z, s
+		// standard piece names (see wikipedia)
+		// uppercase in defiance of swift convention
+		// because the names make no sense in lowercase
+		case I, J, L, O, S, T, Z
 		
 		var occupancyMap: OccupancyMap {
 			switch self {
-			case .line:
+			case .I:
 				return OccupancyMap(width: 4, height: 4,
 					nil, nil,  .a, nil,
 					nil, nil,  .a, nil,
 					nil, nil,  .a, nil,
 					nil, nil,  .a, nil)
-			case .square:
+			case .J:
 				return OccupancyMap(width: 4, height: 4,
-					nil, nil, nil, nil,
-					nil,  .b,  .b, nil,
+					nil, nil,  .b, nil,
+					nil, nil,  .b, nil,
 					nil,  .b,  .b, nil,
 					nil, nil, nil, nil)
 			case .L:
@@ -46,23 +49,29 @@ struct Piece {
 					nil,  .c, nil, nil,
 					nil,  .c,  .c, nil,
 					nil, nil, nil, nil)
-			case .r:
+			case .O:
 				return OccupancyMap(width: 4, height: 4,
-					nil, nil,  .d, nil,
-					nil, nil,  .d, nil,
+					nil, nil, nil, nil,
+					nil,  .d,  .d, nil,
 					nil,  .d,  .d, nil,
 					nil, nil, nil, nil)
-			case .s:
+			case .S:
 				return OccupancyMap(width: 4, height: 4,
 					nil, nil, nil, nil,
 					nil, nil,  .e,  .e,
 					nil,  .e,  .e, nil,
 					nil, nil, nil, nil)
-			case .z:
+			case .T:
 				return OccupancyMap(width: 4, height: 4,
 					nil, nil, nil, nil,
-					 .f,  .f, nil, nil,
-					nil,  .f,  .f, nil,
+					nil,  .f,  .f,  .f,
+					nil, nil,  .f, nil,
+					nil, nil, nil, nil)
+			case .Z:
+				return OccupancyMap(width: 4, height: 4,
+					nil, nil, nil, nil,
+					 .g,  .g, nil, nil,
+					nil,  .g,  .g, nil,
 					nil, nil, nil, nil)
 			}
 		}
