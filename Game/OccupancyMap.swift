@@ -48,6 +48,18 @@ struct OccupancyMap: Equatable {
 	enum Cell: Equatable {
 		case vacant
 		case filled(variety: BlockVariety)
+		
+		
+		static func ==(lhs: Cell, rhs: Cell) -> Bool {
+			switch (lhs, rhs) {
+			case (.vacant, .vacant):
+				return true
+			case let (.filled(variety: l), .filled(variety: r)):
+				return l == r
+			default:
+				return false
+			}
+		}
 	}
 	
 	fileprivate var map: [Cell]
@@ -90,6 +102,13 @@ struct OccupancyMap: Equatable {
 		}
 	}
 	
+	static func ==(lhs: OccupancyMap, rhs: OccupancyMap) -> Bool {
+		return lhs.width == rhs.width &&
+			   lhs.height == rhs.height &&
+			   lhs.map == rhs.map
+	}
+
+	
 	func rotated(to rotation: Rotation) -> OccupancyMap {
 		let (w: w, h: h) = rotation.transform(size: (w: width, h: height))
 		
@@ -104,50 +123,106 @@ struct OccupancyMap: Equatable {
 		return result
 	}
 	
-	// fill, clear, test
-	// copy from other map?
-	
-	
-	
-	
-	
+
 	// MARK: - Collision Detection
 	
-	// tests whether any occupied block in the given map is outside of the boundaries of the given board
-	func hitsSidesOrBottom(map: OccupancyMap, x: Int, y: Int) -> Bool {
-		// true if any occupied cell in map is x < 0 or x >= width/height
-		// true if any occupied cell in map is y < 0
-		return false
+	struct Bounds: OptionSet {
+		let rawValue: Int
+		init(rawValue: Int) {
+			self.rawValue = rawValue
+		}
+		
+		static let north = Bounds(rawValue: 1 << 0)
+		static let south = Bounds(rawValue: 1 << 1)
+		static let east  = Bounds(rawValue: 1 << 2)
+		static let west  = Bounds(rawValue: 1 << 3)
 	}
 	
-	
-	func spillsOverTop(map: OccupancyMap, x: Int, y: Int) -> Bool {
-		// true if any occupied cell in map is y >= height
-		return false
+	enum OverlaidCell {
+		case outOfBounds(bounds: Bounds)
+		case vacant
+		case filled(variety: BlockVariety)
 	}
 	
+	typealias OverlayCallback = (_ x: Int, _ y: Int, _ existing: OverlaidCell, _ incoming: Cell) -> ()
 	
-	// tests whether the given map would collide with occupied cells
-	func hitTest(map: OccupancyMap, x: Int, y: Int) -> Bool {
-		guard !hitsSidesOrBottom(map: map, x: x, y: y) else { return true }
-		return false
+	// calls callback once for each cell in map,
+	// with the coordinates in self,
+	// the existing state of self at that position,
+	// and the state of map at that point
+	func overlay(_ map: OccupancyMap, x: Int, y: Int, action: OverlayCallback) {
+		for theirY in 0..<map.height {
+			let myY = y + theirY
+			for theirX in 0..<map.width {
+				let myX = x + theirX
+				
+				var bounds: Bounds = []
+				if myX < 0       { bounds.insert(.west)  }
+				if myX >= width  { bounds.insert(.east)  }
+				if myY < 0       { bounds.insert(.north) }
+				if myY >= height { bounds.insert(.south) }
+				
+				let existing: OverlaidCell
+				if bounds.isEmpty {
+					switch self[myX, myY] {
+					case .vacant:
+						existing = .vacant
+					case .filled(variety: let variety):
+						existing = .filled(variety: variety)
+					}
+				} else {
+					existing = .outOfBounds(bounds: bounds)
+				}
+				
+				action(myX, myY, existing, map[theirX, theirY])
+			}
+		}
 	}
 	
-}
-
-func ==(lhs: OccupancyMap.Cell, rhs: OccupancyMap.Cell) -> Bool {
-	switch (lhs, rhs) {
-	case (.vacant, .vacant):
-		return true
-	case let (.filled(variety: l), .filled(variety: r)):
-		return l == r
-	default:
-		return false
+	struct Collision: OptionSet {
+		let rawValue: Int
+		init(rawValue: Int) {
+			self.rawValue = rawValue
+		}
+	
+		static let wall  = Collision(rawValue: 1 << 0)
+		static let top   = Collision(rawValue: 1 << 1)
+		static let block = Collision(rawValue: 1 << 2)
 	}
-}
-
-func ==(lhs: OccupancyMap, rhs: OccupancyMap) -> Bool {
-	return lhs.width == rhs.width &&
-		   lhs.height == rhs.height &&
-		   lhs.map == rhs.map
+	
+	func collides(map: OccupancyMap, x: Int, y: Int) -> Collision {
+		var collision: Collision = []
+		overlay(map, x: x, y: y) { (_, _, existing, incoming) in
+			switch (existing, incoming) {
+			case (_, .vacant):
+				break
+			case (.vacant, .filled):
+				break
+			case (.filled, .filled):
+				collision.insert(.block)
+			case (.outOfBounds(bounds: let bounds), .filled):
+				if bounds.contains(.north) {
+					collision.insert(.top)
+				}
+				if !bounds.intersection([.south, .east, .west]).isEmpty {
+					collision.insert(.wall)
+				}
+			}
+		}
+		return collision
+	}
+	
+	mutating func insert(map: OccupancyMap, x: Int, y: Int) {
+		overlay(map, x: x, y: y) { (myX, myY, existing, incoming) in
+			switch (existing, incoming) {
+			case (_, .vacant):
+				break
+			case (.vacant, .filled(variety: let blockVariety)):
+				self[myX, myY] = .filled(variety: blockVariety)
+			default:
+				fatalError("Can't insert \(map) at (\(x),\(y)) in \(self)")
+			}
+		}
+	}
+	
 }

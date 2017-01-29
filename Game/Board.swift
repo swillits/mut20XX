@@ -54,7 +54,7 @@ enum BoardAction {
 
 // each variety has its own color
 enum BlockVariety: Equatable {
-	case a, b, c, d, e, f
+	case a, b, c, d, e, f, g
 }
 
 
