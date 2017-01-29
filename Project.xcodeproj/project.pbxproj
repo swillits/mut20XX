@@ -24,7 +24,6 @@
 		5D849AB21E3BB7DE0027AF00 /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB11E3BB7DE0027AF00 /* Input.swift */; };
 		5D849AB41E3BB8080027AF00 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB31E3BB8080027AF00 /* Player.swift */; };
 		5D849AB61E3BC7180027AF00 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB51E3BC7180027AF00 /* Audio.swift */; };
-		5D849AB81E3BD47E0027AF00 /* Styleguide.txt in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB71E3BD47E0027AF00 /* Styleguide.txt */; };
 		5D849ABA1E3BDC570027AF00 /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5D849AB91E3BDC570027AF00 /* Notes.txt */; };
 		5D849ACE1E3BE6100027AF00 /* ButtonClick.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ABE1E3BE6100027AF00 /* ButtonClick.m4a */; };
 		5D849ACF1E3BE6100027AF00 /* ButtonHover.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ABF1E3BE6100027AF00 /* ButtonHover.m4a */; };
@@ -369,7 +368,6 @@
 				5D849A801E3BB1260027AF00 /* AppDelegate.swift in Sources */,
 				5D849AB41E3BB8080027AF00 /* Player.swift in Sources */,
 				5D849AAF1E3BB7A40027AF00 /* Game.swift in Sources */,
-				5D849AB81E3BD47E0027AF00 /* Styleguide.txt in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
