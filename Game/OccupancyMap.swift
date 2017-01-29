@@ -84,6 +84,18 @@ struct OccupancyMap: Equatable {
 		}
 	}
 	
+	
+	static func ==(lhs: OccupancyMap, rhs: OccupancyMap) -> Bool {
+		return lhs.width == rhs.width &&
+			   lhs.height == rhs.height &&
+			   lhs.map == rhs.map
+	}
+	
+	
+	
+	
+	// MARK: - Access
+	
 	private(set) subscript(x: Int, y: Int) -> Cell {
 		get {
 			assert(x >= 0)
@@ -101,12 +113,6 @@ struct OccupancyMap: Equatable {
 		}
 	}
 	
-	static func ==(lhs: OccupancyMap, rhs: OccupancyMap) -> Bool {
-		return lhs.width == rhs.width &&
-			   lhs.height == rhs.height &&
-			   lhs.map == rhs.map
-	}
-
 	
 	func rotated(to rotation: Rotation) -> OccupancyMap {
 		let (w: w, h: h) = rotation.transform(size: (w: width, h: height))
@@ -122,7 +128,9 @@ struct OccupancyMap: Equatable {
 		return result
 	}
 	
-
+	
+	
+	
 	// MARK: - Collision Detection
 	
 	struct Bounds: OptionSet {
@@ -211,6 +219,12 @@ struct OccupancyMap: Equatable {
 		return collision
 	}
 	
+	
+	
+	
+	
+	// MARK: - Mutation
+	
 	mutating func insert(map: OccupancyMap, x: Int, y: Int) {
 		overlay(map, x: x, y: y) { (myX, myY, existing, incoming) in
 			switch (existing, incoming) {
@@ -224,4 +238,92 @@ struct OccupancyMap: Equatable {
 		}
 	}
 	
+	
+	
+	mutating func copyLines(from: CountableRange<Int>, to: CountableRange<Int>) {
+		assert(from.count == to.count)
+		assert(from.lowerBound >= 0)
+		assert(from.upperBound <= height)
+		assert(to.lowerBound >= 0)
+		assert(to.upperBound <= height)
+		
+		if to.lowerBound > from.lowerBound {
+			var srcLine = from.upperBound - 1
+			var dstLine = to.upperBound - 1
+			
+			for _ in 1...from.count {
+				copyLine(from: srcLine, to: dstLine)
+				srcLine -= 1
+				dstLine -= 1
+			}
+			
+		} else {
+			var srcLine = from.lowerBound
+			var dstLine = to.lowerBound
+			
+			for _ in 1...from.count {
+				copyLine(from: srcLine, to: dstLine)
+				srcLine += 1
+				dstLine += 1
+			}
+		}
+	}
+	
+	
+	
+	mutating func copyLine(from srcLine: Int, to dstLine: Int) {
+		assert((0..<height).contains(srcLine))
+		assert((0..<height).contains(dstLine))
+		
+		for x in 0..<width {
+			self[x, dstLine] = self[x, srcLine]
+		}
+	}
+	
+	
+	
+	mutating func vacate(lines: IndexSet) {
+		for y in lines {
+			for x in 0..<width {
+				self[x, y] = Cell.vacant
+			}
+		}
+	}
+	
+	
+	
+	/// Shifts the given line and all those above upwards by `count` lines, leaving empty lines behind.
+	mutating func shiftUp(startingLine: Int, count: Int) {
+		assert(startingLine >= 0)
+		assert(startingLine < height - 1)
+		assert(startingLine + count <= height)
+		
+		let numToCopy = height - (startingLine + count)
+		if numToCopy > 0 {
+			copyLines(from: startingLine ..< (startingLine + numToCopy), to: (height - numToCopy)..<height)
+		}
+		vacate(lines: IndexSet(integersIn: startingLine ..< (startingLine + count)))
+	}
+	
+	
+	
+	/// Shifts the given line and all those above downwards by `count` lines, leaving empty lines behind.
+	private mutating func shiftDown(startingLine: Int, count: Int) {
+		assert(startingLine - count >= 0)
+		assert(startingLine <= height)
+		
+		let numToCopy = height - startingLine
+		if numToCopy > 0 {
+			copyLines(from: startingLine ..< (startingLine + numToCopy), to: (startingLine - count)..<(startingLine - count + numToCopy))
+		}
+		vacate(lines: IndexSet(integersIn: (startingLine - count + numToCopy) ..< height))
+	}
+	
+	
+	/// Erases lines, shifting lines above downwards, and shifting in blank lines from the top
+	mutating func eraseLines(_ indexSet: IndexSet) {
+		for line in indexSet.reversed() {
+			shiftDown(startingLine: line + 1, count: 1)
+		}
+	}
 }

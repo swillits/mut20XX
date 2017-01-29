@@ -11,41 +11,99 @@ import Foundation
 
 struct Board {
 	
-	// size
-	// occupancy map
+	static let width = 10
+	static let height = 20
 	
-	// performAction(action)
-	
-	// private:
-	// eraseLine(which line)
-	// erase all
-	// fillWithBricks
-	// shiftLinesUpwards(delta)
-	// addLineToBottom(line)
-	// placePiece()
+	fileprivate var map = OccupancyMap(width: width, height: height)
 	
 	
-	/// Returns: true if the proposed position for the piece is not occupied by any blocks and does not hit the sides or bottom of the board
+	
+	
+	// MARK: - Info
+	
 	func doesPositionCollide(piece: Piece, position: Piece.Position) -> Bool {
-		return false
+		let collision = map.collides(map: piece.occupancyMap, x: position.x, y: position.y)
+		return collision.contains(.wall)
 	}
 	
 	
 	func finalPositionIfDropped(piece: Piece, position: Piece.Position) -> Piece.Position {
-		return Piece.Position(x: 0, y: 0)
+		var y = position.y
+		
+		while true {
+			let collision = map.collides(map: piece.occupancyMap, x: position.x, y: position.y)
+			if collision.contains(.wall) {
+				assert(y < position.y, "The piece collides at the given position meaning the piece should have already been placed and this indicates an error.")
+				return Piece.Position(x: position.x, y: y + 1)
+			}
+			
+			y -= 1
+		}
+		
+		preconditionFailure("Should always collide with the bottom wall.")
+	}
+	
+	
+	
+	
+	// MARK: - Actions
+	
+	mutating func perform(action: BoardAction) {
+		switch action {
+		case let .eraseLines(lines):
+			map.eraseLines(lines)
+			
+		case let .addLinesToBottom(lines):
+			addLinesToBottom(lines: lines)
+			
+		case let .placePiece(piece, position):
+			map.insert(map: piece.occupancyMap, x: position.x, y: position.y)
+		}
+	}
+	
+	
+	private mutating func addLinesToBottom(lines: [Line]) {
+		map.shiftUp(startingLine: 0, count: lines.count)
+		for li in 0..<lines.count {
+			map.insert(map: lines[li].occupancyMap, x: 0, y: li)
+		}
+	}
+	
+	
+	mutating func removeCompletedLines() -> IndexSet {
+		// Inefficient in that only lines with touched by a placed piece should be examined, but keeping this a separate step for now
+		
+		var completedLineIndexes = IndexSet()
+		for y in 0..<map.height {
+			var complete = true
+			
+			for x in 0..<map.width {
+				if case .vacant = map[x, y] {
+					complete = false
+					break
+				}
+			}
+			
+			if complete {
+				completedLineIndexes.insert(y)
+			}
+		}
+		
+		map.eraseLines(completedLineIndexes)
+		return completedLineIndexes
 	}
 }
 
 
 
+
+// MARK: - Types
+
+
 // Easily encodable and self-contained. Contains all info to perform a move on a given board. Suitable for transmission.
 enum BoardAction {
-	
-	case eraseLine(Int)
-	case eraseAll
-	case fillWithBricks
-	case shiftLinesUpwards(startingLine: Int, count: Int)
-	case addLineToBottom(Line)
+	case eraseLines(IndexSet)
+	case addLinesToBottom([Line])
 	case placePiece(piece: Piece, position: Piece.Position)
 }
 
@@ -60,7 +118,7 @@ enum BlockVariety: Equatable {
 
 /// The contents of a line of a board, suitable for transmission.
 struct Line {
-	// Simply a 1 x 10 occupancy map?
+	var occupancyMap = OccupancyMap(width: Board.width, height: 1)
 }
 
 

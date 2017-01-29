@@ -29,6 +29,7 @@ class OccupancyMapTests: XCTestCase {
 			nil, nil, nil, nil))
     }
 	
+	
 	func testCollision() {
 		var board = OccupancyMap(width: 4, height: 4,
 			nil, nil, nil, nil,
@@ -57,4 +58,42 @@ class OccupancyMapTests: XCTestCase {
 		XCTAssertEqual([.top, .wall, .block], board.collides(map: o, x: -2, y: -2))
 	}
 
+	
+	func testShiftUp() {
+		var board = OccupancyMap(width: 1, height: 7,
+			 .a, .b, .c, .d, .e, .f, .g)
+		
+		board.shiftUp(startingLine: 0, count: 1)
+		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7, nil, .a, .b, .c, .d, .e, .f))
+		
+		board.shiftUp(startingLine: 3, count: 2)
+		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7, nil, .a, .b, nil, nil, .c, .d))
+		
+		board = OccupancyMap(width: 1, height: 7,
+			 .a, .b, .c, .d, .e, .f, .g)
+		board.shiftUp(startingLine: 0, count: 7)
+		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7,
+			nil, nil, nil, nil, nil, nil, nil))
+	}
+	
+	
+	
+	func testEraseLines() {
+		var board = OccupancyMap(width: 1, height: 7,
+			.a, .b, .c, .d, .e, .f, .g)
+		
+		board.eraseLines([2, 3])
+		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7,
+			.a, .b, .e, .f, .g, nil, nil))
+		
+		board.eraseLines([0, 3])
+		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7,
+			.b, .e, .g, nil, nil, nil, nil))
+		
+		board = OccupancyMap(width: 1, height: 7,
+			.a, .b, .c, .d, .e, .f, .g)
+		board.eraseLines(IndexSet(integersIn: 0..<7))
+		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7,
+			nil, nil, nil, nil, nil, nil, nil))
+	}
 }
