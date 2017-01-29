@@ -75,6 +75,11 @@ struct Piece {
 					nil, nil, nil, nil)
 			}
 		}
+		
+		
+		static func all() -> [Shape] {
+			return [.I, .J, .L, .O, .S, .T, .Z]
+		}
 	}
 	
 	
