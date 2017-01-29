@@ -7,19 +7,37 @@
 //
 
 import Foundation
+import GameplayKit
 
 
-/// Random generator for shapes
-/// Instead of truly random, try to maintain uniformity, or not...
-struct ShapeGenerator {
-	
-	init() {
+
+extension Piece.Shape {
+	struct Generator {
+		
+		mutating func nextShape() -> Piece.Shape {
+			if shapes.isEmpty {
+				reset()
+			}
+			
+			return shapes.popLast()!
+		}
+		
+		
+		private let shuffler = GKARC4RandomSource()
+		private var shapes: [Piece.Shape] = []
+		
+		private mutating func reset() {
+			
+			// The compiler refuses any form of this... why?
+			// shapes = [Piece.Shape](repeating: Piece.Shape.all(), count: 4)
+			
+			shapes.removeAll()
+			for _ in 1...4 {
+				shapes.append(contentsOf: Piece.Shape.all())
+			}
+			
+			shapes = shuffler.arrayByShufflingObjects(in: shapes) as! [Piece.Shape]
+		}
 		
 	}
-	
-	
-//	func nextShape() -> Piece {
-//		return Piece()
-//	}
-	
 }
