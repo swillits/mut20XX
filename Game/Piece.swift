@@ -20,6 +20,11 @@ struct Piece {
 	}
 	
 	
+	static var placeholder: Piece {
+		return Piece(shape: .I, position: Piece.Position(x: 0, y: 0), rotation: .north)
+	}
+	
+	
 	
 	
 	enum Shape {

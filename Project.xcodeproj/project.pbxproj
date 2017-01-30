@@ -41,6 +41,9 @@
 		5D849ADB1E3BE6100027AF00 /* TetrisMusic2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ACB1E3BE6100027AF00 /* TetrisMusic2.m4a */; };
 		5D849ADC1E3BE6100027AF00 /* TetrisMusic3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ACC1E3BE6100027AF00 /* TetrisMusic3.m4a */; };
 		5D849ADD1E3BE6100027AF00 /* WonGame.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ACD1E3BE6100027AF00 /* WonGame.m4a */; };
+		5D849AE21E3E9F420027AF00 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AE11E3E9F420027AF00 /* Server.swift */; };
+		5D849AE41E3E9F490027AF00 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AE31E3E9F490027AF00 /* Client.swift */; };
+		5D849AE61E3E9F560027AF00 /* Communication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AE51E3E9F560027AF00 /* Communication.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +96,9 @@
 		5D849ACB1E3BE6100027AF00 /* TetrisMusic2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = TetrisMusic2.m4a; sourceTree = "<group>"; };
 		5D849ACC1E3BE6100027AF00 /* TetrisMusic3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = TetrisMusic3.m4a; sourceTree = "<group>"; };
 		5D849ACD1E3BE6100027AF00 /* WonGame.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = WonGame.m4a; sourceTree = "<group>"; };
+		5D849AE11E3E9F420027AF00 /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Server.swift; path = Game/Server.swift; sourceTree = SOURCE_ROOT; };
+		5D849AE31E3E9F490027AF00 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Client.swift; path = Game/Client.swift; sourceTree = SOURCE_ROOT; };
+		5D849AE51E3E9F560027AF00 /* Communication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Communication.swift; path = Game/Communication.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +203,9 @@
 		5D849AAD1E3BB78E0027AF00 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				5D849AE11E3E9F420027AF00 /* Server.swift */,
+				5D849AE31E3E9F490027AF00 /* Client.swift */,
+				5D849AE51E3E9F560027AF00 /* Communication.swift */,
 			);
 			name = Networking;
 			path = MUT20XX;
@@ -359,14 +368,17 @@
 			files = (
 				5D849A881E3BB1260027AF00 /* ViewController.swift in Sources */,
 				5D849A861E3BB1260027AF00 /* GameScene.swift in Sources */,
+				5D849AE61E3E9F560027AF00 /* Communication.swift in Sources */,
 				5D849AB61E3BC7180027AF00 /* Audio.swift in Sources */,
 				5D849AAA1E3BB5700027AF00 /* OccupancyMap.swift in Sources */,
 				5D849AA81E3BB22F0027AF00 /* Piece.swift in Sources */,
 				5D849AA61E3BB2180027AF00 /* Board.swift in Sources */,
+				5D849AE41E3E9F490027AF00 /* Client.swift in Sources */,
 				5D849AAC1E3BB71B0027AF00 /* ShapeGenerator.swift in Sources */,
 				5D849AB21E3BB7DE0027AF00 /* Input.swift in Sources */,
 				5D849A801E3BB1260027AF00 /* AppDelegate.swift in Sources */,
 				5D849AB41E3BB8080027AF00 /* Player.swift in Sources */,
+				5D849AE21E3E9F420027AF00 /* Server.swift in Sources */,
 				5D849AAF1E3BB7A40027AF00 /* Game.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

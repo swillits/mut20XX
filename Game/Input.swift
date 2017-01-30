@@ -6,3 +6,15 @@
 //
 
 import Foundation
+
+
+enum InputAction {
+	
+	case moveLeft
+	case moveRight
+	case moveDown
+	case rotateLeft
+	case rotateRight
+	case drop
+	
+}

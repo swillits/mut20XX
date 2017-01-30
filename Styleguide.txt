@@ -32,3 +32,4 @@ Syntax
 
 - Do not explicitly declare enum raw values unless there's a good reason.
 
+- Namespacing? Flat vs hierarchal? Hmm.
