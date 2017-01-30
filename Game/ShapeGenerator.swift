@@ -12,31 +12,15 @@ import GameplayKit
 
 extension Piece.Shape {
 	struct Generator {
-		
-		mutating func nextShape() -> Piece.Shape {
-			if shapes.isEmpty {
-				reset()
-			}
-			
-			return shapes.popLast()!
-		}
-		
-		
 		private let shuffler = GKARC4RandomSource()
 		private var shapes: [Piece.Shape] = []
 		
-		private mutating func reset() {
-			
-			// The compiler refuses any form of this... why?
-			// shapes = [Piece.Shape](repeating: Piece.Shape.all(), count: 4)
-			
-			shapes.removeAll()
-			for _ in 1...4 {
-				shapes.append(contentsOf: Piece.Shape.all())
+		mutating func nextShape() -> Piece.Shape {
+			if shapes.isEmpty {
+				shapes = Array<Array<Piece.Shape>>(repeating: Piece.Shape.all(), count: 4).joined().reversed()
+				shapes = shuffler.arrayByShufflingObjects(in: shapes) as! [Piece.Shape]
 			}
-			
-			shapes = shuffler.arrayByShufflingObjects(in: shapes) as! [Piece.Shape]
+			return shapes.popLast()!
 		}
-		
 	}
 }
