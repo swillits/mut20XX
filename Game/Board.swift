@@ -33,7 +33,7 @@ struct Board {
 		while true {
 			let collision = map.collides(map: piece.occupancyMap, x: position.x, y: position.y)
 			if collision.contains(.wall) {
-				assert(y < position.y, "The piece collides at the given position meaning the piece should have already been placed and this indicates an error.")
+				precondition(y < position.y, "The piece collides at the given position meaning the piece should have already been placed and this indicates an error.")
 				return Piece.Position(x: position.x, y: y + 1)
 			}
 			
