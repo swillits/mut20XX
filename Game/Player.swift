@@ -30,13 +30,6 @@ struct PlayerState {
 	var ready: Bool = false
 	var gameLoaded: Bool = false
 	
-	var currentPice: Piece = Piece.placeholder
+	var currentPiece: Piece = Piece.placeholder
 	var nextPiece: Piece = Piece.placeholder
-}
-
-
-struct LocalPlayerState {
-	var holdingLeft: Bool = false
-	var holdingRight: Bool = false
-	var lastHorizontalMovementTime: TimeInterval = 0.0
 }

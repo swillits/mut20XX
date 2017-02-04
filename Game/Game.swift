@@ -9,14 +9,19 @@ import Foundation
 
 
 
-// Persistent object across games
+/// Persistent object across games
 class Game {
 	private static let minimumTimeBetweenHorizontalMoves: TimeInterval = 0.1
-	private static let normalTimeBetweenVerticalMoves: TimeInterval = 1.0
-	
+	private static let minimumTimeBetweenVerticalMoves: TimeInterval = 0.1
+	private static let normalTimeBetweenFalls: TimeInterval = 1.0
+	private static let minimumTimeBetweenRotations: TimeInterval = 0.05
+	static let minPiecePosition = Piece.Position(x: -4, y: -4)
+	static let maxPiecePosition = Piece.Position(x: Board.width, y: Board.height)
 	
 	static let shared = Game()
 	var state: GameState!
+	
+	let inputMap = PlayerInputMap()
 	
 	
 	
@@ -31,71 +36,193 @@ class Game {
 	
 	
 	func start() {
-		state.playing = true
+		state.phase = .playing
 	}
 	
 	
 	
-	
-	func update() {
-		let now = NSDate.timeIntervalSinceReferenceDate
+	func update(timing: UpdateTiming) {
+		switch state.phase {
+		case .prepped:
+			return
+			
+		case .gameOver:
+			return
+			
+		case .watching:
+			return
+			
+		case .playing:
+			updateLocalPlayer(timing: timing)
+		}
 		
-		if state.playing {
-			if state.localPlayer.state.isAlive {
-				if now - state.localPlayerState.lastHorizontalMovementTime > Game.minimumTimeBetweenHorizontalMoves {
-					
-					// TODO: If move left held down, then do left, else if right then move right etc...
-					if true {
-						state.localPlayerState.lastHorizontalMovementTime = now
-						moveLeft()
-					}
-				}
-				
-				
-				if now - state.lastVerticalMovementTime >= Game.normalTimeBetweenVerticalMoves {
-					updateFallingPiece()
-					state.lastVerticalMovementTime = now
-				}
-			}
+		inputMap.clearActivated()
+	}
+	
+	
+	
+	private func updateLocalPlayer(timing: UpdateTiming) {
+		func rotatingAction() -> PlayerInput? {
+			if inputMap[.rotateLeft].active  { return .rotateLeft }
+			if inputMap[.rotateRight].active { return .rotateRight }
+			if inputMap[.rotateLeft].activated  { return .rotateLeft }
+			if inputMap[.rotateRight].activated { return .rotateRight }
+			return nil
+		}
+		
+		func horizontalAction() -> PlayerInput? {
+			if inputMap[.moveLeft].active  { return .moveLeft }
+			if inputMap[.moveRight].active { return .moveRight }
+			if inputMap[.moveLeft].activated  { return .moveLeft }
+			if inputMap[.moveRight].activated { return .moveRight }
+			return nil
+		}
+		
+		
+		
+		guard state.localPlayer.state.isAlive else {
+			return
+		}
+		
+		if let action = rotatingAction() {
+			rotateFallingPiece(input: action, timing: timing)
+		}
+		
+		if let action = horizontalAction() {
+			moveFallingPiece(input: action, timing: timing)
+		}
+		
+		if inputMap[.moveDown].activated {
+			moveFallingPieceDown(timing: timing)
+		}
+		
+		if inputMap[.drop].activated {
+			dropFallingPiece(timing: timing)
+		}
+		
+		
+		updateFallingPiece(timing: timing)
+		
+		
+		// TODO: Check for completed lines
+	}
+	
+	
+	
+	private func rotateFallingPiece(input: PlayerInput, timing: UpdateTiming) {
+		precondition(input == .rotateLeft || input == .rotateRight)
+		guard timing.now - state.lastRotationTime > Game.minimumTimeBetweenRotations else {
+			return
+		}
+		
+		let piece = state.localPlayer.state.currentPiece.proposed(by: input)
+		if state.localPlayer.state.board.doesPositionCollide(piece: piece) {
+			GameSound.rotateBlock.play()
+			state.localPlayer.state.currentPiece = piece
+			state.lastRotationTime = timing.now
+			
+			// TODO: tell server
 		}
 	}
 	
 	
 	
-	
-	
-	private func moveLeft() {
-		//	- valid move?
-		//		- play sound
-		//		- update local piece position
-		//		- tell server
+	private func moveFallingPiece(input: PlayerInput, timing: UpdateTiming) {
+		precondition(input == .moveLeft || input == .moveRight)
+		guard timing.now - state.lastHorizontalMovementTime > Game.minimumTimeBetweenHorizontalMoves else {
+			return
+		}
 		
-		
+		let piece = state.localPlayer.state.currentPiece.proposed(by: input)
+		if state.localPlayer.state.board.doesPositionCollide(piece: piece) {
+			GameSound.moveBlock.play()
+			state.localPlayer.state.currentPiece = piece
+			state.lastHorizontalMovementTime = timing.now
+			
+			// TODO: tell server
+		}
 	}
 	
 	
 	
-	private func updateFallingPiece() {
-		// if one spot down is invalid, then place the piece where it is, otherwise move it down
-	} 
+	private func moveFallingPieceDown(timing: UpdateTiming) {
+		guard timing.now - state.lastVerticalMovementTime > Game.minimumTimeBetweenVerticalMoves else {
+			return
+		}
+		
+		let piece = state.localPlayer.state.currentPiece.proposed(by: .moveDown)
+		if state.localPlayer.state.board.doesPositionCollide(piece: piece) {
+			GameSound.moveBlock.play()
+			state.localPlayer.state.currentPiece = piece
+			state.lastVerticalMovementTime = timing.now
+			
+			// TODO: tell server
+		}
+	}
+	
+	
+	
+	private func updateFallingPiece(timing: UpdateTiming) {
+		guard timing.now - state.lastFallingTime >= Game.normalTimeBetweenFalls else {
+			return
+		}
+		
+		let piece = state.localPlayer.state.currentPiece.proposed(by: .moveDown)
+		if state.localPlayer.state.board.doesPositionCollide(piece: piece) {
+			dropFallingPiece(timing: timing)
+		} else {
+			state.localPlayer.state.currentPiece = piece
+			state.lastFallingTime = timing.now
+			
+			// TODO: tell server
+		}
+	}
+	
+	
+	
+	private func dropFallingPiece(timing: UpdateTiming) {
+		var piece = state.localPlayer.state.currentPiece
+		piece.position = state.localPlayer.state.board.finalPositionIfDropped(piece: state.localPlayer.state.currentPiece)
+		state.localPlayer.state.currentPiece = piece
+		state.lastFallingTime = timing.now
+		GameSound.dropBlock.play()
+		
+		// TODO: tell server
+	}
+	
+	
+	
+	struct UpdateTiming {
+		
+		/// Absolute time of the frame
+		let now: TimeInterval
+		
+		/// Delta since previous update
+		let delta: TimeInterval
+	}
 }
 
 
 
 
-// The state of the current game.
-// Not liking the funkiness of separate player state and local state. Using 'class' vs struct for Player and LocalPlayer makes it a bit more referrentially pleasing and efficient to update, but I thought having the goal of GameState be One Massive Struct could be useful at some point in the future, particularly for replays etc. So, because of that, we're suffering the wonkiness for now until a better thought comes along.  
+/// The state of the current game.
 struct GameState {
 	
-	var players: [PlayerID: Player]
-	var localPlayerState = LocalPlayerState()
-	let localPlayerID: String
-	
-	var playing: Bool = false
+	// Shared values for all clients
+	// ---------------------------------------------------
 	// var levelNumber: Int
 	// var gameRules: Rules -- until someone dies, or first to X lines complete, etc
+	var players: [PlayerID: Player]
 	
+	// --------- Local-client-only state ------------------
+	// When server/client split happens, this'll go somewhere better
+	let localPlayerID: String
+	var phase: Phase = .prepped
+	var lastHorizontalMovementTime: TimeInterval = 0.0
 	var lastVerticalMovementTime: TimeInterval = 0.0
+	var lastRotationTime: TimeInterval = 0.0
+	var lastFallingTime: TimeInterval = 0.0
+	// -----------------------------------------------------
 	
 	
 	init(players: [Player], localPlayerID: PlayerID) {
@@ -123,6 +250,12 @@ struct GameState {
 	
 	
 	// Mmmm… perhaps all of those actions/methods which manipulate the GameState which are in Game above should be mutating methods in GameState itself.
+	
+	
+	
+	enum Phase: Int {
+		case prepped, playing, watching, gameOver
+	}
 }
 
 
@@ -224,3 +357,42 @@ Client - Game over
 
 
 */
+
+
+
+
+
+
+
+
+
+extension Piece {
+	
+	func proposed(by input: PlayerInput) -> Piece {
+		var piece = self
+		
+		switch input {
+		case .moveLeft:
+			piece.position = Piece.Position(x: piece.position.x - 1, y: piece.position.y)
+		
+		case .moveRight:
+			piece.position = Piece.Position(x: piece.position.x + 1, y: piece.position.y)
+			
+		case .moveDown:
+			piece.position = Piece.Position(x: piece.position.x, y: piece.position.y - 1)
+			
+		case .rotateLeft:
+			piece.rotation = piece.rotation.nextAnticlockwise()
+			
+		case .rotateRight:
+			piece.rotation = piece.rotation.nextClockwise()
+		
+		default:
+			preconditionFailure()
+		}
+		
+		return piece
+	}
+	
+}
+

@@ -21,23 +21,19 @@ struct Board {
 	
 	// MARK: - Info
 	
-	func doesPositionCollide(piece: Piece, position: Piece.Position) -> Bool {
-		let collision = map.collides(map: piece.occupancyMap, x: position.x, y: position.y)
+	func doesPositionCollide(piece: Piece) -> Bool {
+		let collision = map.collides(map: piece.occupancyMap, x: piece.position.x, y: piece.position.y)
 		return collision.contains(.wall)
 	}
 	
 	
-	func finalPositionIfDropped(piece: Piece, position: Piece.Position) -> Piece.Position {
-		var y = position.y
+	func finalPositionIfDropped(piece: Piece) -> Piece.Position {
+		precondition(!map.collides(map: piece.occupancyMap, x: piece.position.x, y: piece.position.y).contains(.wall), "The piece collides at the given position meaning the piece should have already been placed and this indicates an error.")
 		
-		while true {
-			let collision = map.collides(map: piece.occupancyMap, x: position.x, y: position.y)
-			if collision.contains(.wall) {
-				assert(y < position.y, "The piece collides at the given position meaning the piece should have already been placed and this indicates an error.")
-				return Piece.Position(x: position.x, y: y + 1)
+		for y in (Game.minPiecePosition.y ..< piece.position.y).reversed() {
+			if map.collides(map: piece.occupancyMap, x: piece.position.x, y: y).contains(.wall) {
+				return Piece.Position(x: piece.position.x, y: y + 1)
 			}
-			
-			y -= 1
 		}
 		
 		preconditionFailure("Should always collide with the bottom wall.")
@@ -56,8 +52,8 @@ struct Board {
 		case let .addLinesToBottom(lines):
 			addLinesToBottom(lines: lines)
 			
-		case let .placePiece(piece, position):
-			map.insert(map: piece.occupancyMap, x: position.x, y: position.y)
+		case let .placePiece(piece):
+			map.insert(map: piece.occupancyMap, x: piece.position.x, y: piece.position.y)
 		}
 	}
 	
@@ -104,7 +100,7 @@ struct Board {
 enum BoardAction {
 	case eraseLines(IndexSet)
 	case addLinesToBottom([Line])
-	case placePiece(piece: Piece, position: Piece.Position)
+	case placePiece(piece: Piece)
 }
 
 

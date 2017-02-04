@@ -11,8 +11,12 @@ import Foundation
 enum Rotation: Int {
 	case north = 0, east = 1, south = 2, west = 3
 	
-	func next() -> Rotation {
+	func nextClockwise() -> Rotation {
 		return Rotation(rawValue: (self.rawValue + 1) % 4)!
+	}
+	
+	func nextAnticlockwise() -> Rotation {
+		return Rotation(rawValue: (self.rawValue - 1) % 4)!
 	}
 	
 	func transform(size: (w: Int, h: Int)) -> (w: Int, h: Int) {
