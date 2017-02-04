@@ -22,6 +22,7 @@ class Game {
 	var state: GameState!
 	
 	let inputMap = PlayerInputMap()
+	private var shapeGenerator = Piece.Shape.Generator()
 	
 	
 	
@@ -30,6 +31,9 @@ class Game {
 		let localPlayer = Player(id: "local", name: "Local Player")
 		let players = [localPlayer] // + [...]
 		state = GameState(players: players, localPlayerID: localPlayer.id)
+		inputMap.reset()
+		advanceLocalPlayerPiece()
+		advanceLocalPlayerPiece()
 	}
 	
 	
@@ -43,20 +47,22 @@ class Game {
 	
 	func update(timing: UpdateTiming) {
 		switch state.phase {
-		case .prepped:
-			return
+		case .prepping:
 			
-		case .gameOver:
-			return
+			// TODO: Move to prepped, tell the server, wait for the server to tell us to move into .playing
+			// state.phase = .prepped
+			// < tell server >
 			
-		case .watching:
+			// For now with single player:
+			state.phase = .playing
+			
+		case .prepped, .gameOver, .watching:
 			return
 			
 		case .playing:
 			updateLocalPlayer(timing: timing)
+			inputMap.clearActivated()
 		}
-		
-		inputMap.clearActivated()
 	}
 	
 	
@@ -106,7 +112,16 @@ class Game {
 	
 	
 	private func checkForCompletedLines() {
-		
+		let linesRemoved = state.localPlayer.state.board.removeCompletedLines()
+		if !linesRemoved.isEmpty {
+			if linesRemoved.count == 0 {
+				GameSound.completeFourLines.play()
+			} else if linesRemoved.count > 0 {
+				GameSound.completeLine.play()
+			}
+			
+			// TODO: score update, tell server
+		}
 	}
 	
 	
@@ -124,13 +139,29 @@ class Game {
 				}	
 			}
 			
+			// TODO: Rotation needs to...
+			//	- Is it not a valid move?
+			//		- Try moving one once to the right. If valid, move temp piece location.
+			//	- Otherwise, try left one.
+			//	- Next try two right, then two left.
+
+			
 		case .drop:
 			var piece = state.localPlayer.state.currentPiece
 			piece.position = state.localPlayer.state.board.finalPositionIfDropped(piece: state.localPlayer.state.currentPiece)
-			state.localPlayer.state.currentPiece = piece
+			advanceLocalPlayerPiece()
 			state.lastFallingTime = timing.now
-			GameSound.dropBlock.play()
 			// TODO: tell server
+			
+			
+			if state.localPlayer.state.board.doesPieceSpillOverTop(piece: piece) {
+				GameSound.collision.play()
+				state.localPlayer.state.isAlive = false
+			} else {
+				GameSound.dropBlock.play()
+			}
+			
+			state.localPlayer.state.board.perform(action: .placePiece(piece))
 		}
 	}
 		
@@ -182,6 +213,13 @@ class Game {
 	
 	
 	
+	private func advanceLocalPlayerPiece() {
+		state.localPlayer.state.currentPiece = state.localPlayer.state.nextPiece
+		state.localPlayer.state.nextPiece = Piece(shape: shapeGenerator.nextShape(), position: Board.initialPiecePosition, rotation: .north)
+	}
+	
+	
+	
 	struct UpdateTiming {
 		
 		/// Absolute time of the frame
@@ -207,7 +245,7 @@ struct GameState {
 	// --------- Local-client-only state ------------------
 	// When server/client split happens, this'll go somewhere better
 	let localPlayerID: String
-	var phase: Phase = .prepped
+	var phase: Phase = .prepping
 	var lastHorizontalMovementTime: TimeInterval = 0.0
 	var lastVerticalMovementTime: TimeInterval = 0.0
 	var lastRotationTime: TimeInterval = 0.0
@@ -240,7 +278,7 @@ struct GameState {
 	
 	
 	enum Phase: Int {
-		case prepped, playing, watching, gameOver
+		case prepping, prepped, playing, watching, gameOver
 	}
 }
 
@@ -248,112 +286,7 @@ struct GameState {
 
 
 
-/*
-
------------------------
-Player Input
------------------------
-
-Movement:
-	key down sets flag, resets time of last press
-	key up clears flag
-
-
-
-Move Left/Right/Down
-	- valid move?
-		- play sound
-		- update local piece position
-		- tell server
-
-Rotate
-	- Create a temporary piece with new rotation
-	- Is it not a valid move?
-		- Try moving one once to the right. If valid, move temp piece location.
-		- Otherwise, try left one.
-		- Next try two right, then two left.
-	- Finally, if it is a valid location
-		- play sound
-		- update local piece
-		- tell server
-
-Drop
-	- Get final location
-	- Place it (see placement below)
-
-
-Placement
-	- If spilling over the top
-		LostGame
-	- else
-		- Play sound
-		- Tell server
-		- Check for complete lines
-		- Change to next shape
-		
-
-Checking complete lines
-	- get them, erase lines
-	- if == 4 shake camera
-		play four sound
-	- else
-		play normal sound
-	- score update
-	- tell server
-
-
-Add lines to bottom
-	- play suck sound
-	- if lines == 4 then shake camera
-	
-
-
-
-
-
------------------------
-Game Prep on Client
------------------------
-
-- Load the correct scene for the given number of players
-- Setup scene with the players
-- Pick current and next shapes
-- Tell the server that the client is prepped
-
-
-
-
------------------------
-Client - Game Start
------------------------
-
-- Allow movement
-- Start the game loop
-
-
-
------------------------
-Client - Game over
------------------------
-
-- Disallow movement
-- Stop music
-- Move to 
-
-
-
-*/
-
-
-
-
-
-
-
-
-
 extension Piece {
-
 	func proposed(by input: PlayerInput) -> Piece {
 		var piece = self
 		

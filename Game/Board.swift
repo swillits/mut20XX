@@ -13,6 +13,7 @@ struct Board {
 	
 	static let width = 10
 	static let height = 20
+	static let initialPiecePosition = Piece.Position(x: 3, y: 20)
 	
 	fileprivate var map = OccupancyMap(width: width, height: height)
 	
@@ -23,7 +24,13 @@ struct Board {
 	
 	func doesPositionCollide(piece: Piece) -> Bool {
 		let collision = map.collides(map: piece.occupancyMap, x: piece.position.x, y: piece.position.y)
-		return collision.contains(.wall)
+		return collision.contains(.wall) || collision.contains(.block)
+	}
+	
+	
+	func doesPieceSpillOverTop(piece: Piece) -> Bool {
+		let collision = map.collides(map: piece.occupancyMap, x: piece.position.x, y: piece.position.y)
+		return collision.contains(.top)
 	}
 	
 	
@@ -50,7 +57,7 @@ struct Board {
 			map.eraseLines(lines)
 			
 		case let .addLinesToBottom(lines):
-			addLinesToBottom(lines: lines)
+			addLinesToBottom(lines)
 			
 		case let .placePiece(piece):
 			map.insert(map: piece.occupancyMap, x: piece.position.x, y: piece.position.y)
@@ -58,7 +65,7 @@ struct Board {
 	}
 	
 	
-	private mutating func addLinesToBottom(lines: [Line]) {
+	private mutating func addLinesToBottom(_ lines: [Line]) {
 		map.shiftUp(startingLine: 0, count: lines.count)
 		for li in 0..<lines.count {
 			map.insert(map: lines[li].occupancyMap, x: 0, y: li)
@@ -100,7 +107,7 @@ struct Board {
 enum BoardAction {
 	case eraseLines(IndexSet)
 	case addLinesToBottom([Line])
-	case placePiece(piece: Piece)
+	case placePiece(Piece)
 }
 
 

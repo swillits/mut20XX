@@ -38,6 +38,7 @@ enum GameSound: Sound {
 	case completeLine
 	case completeFourLines
 	case suckLines
+	case collision
 	case newLevel
 	case gameOver
 	case wonGame
