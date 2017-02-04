@@ -102,17 +102,17 @@ struct OccupancyMap: Equatable {
 	
 	private(set) subscript(x: Int, y: Int) -> Cell {
 		get {
-			assert(x >= 0)
-			assert(x < width)
-			assert(y >= 0)
-			assert(y < height)
+			precondition(x >= 0)
+			precondition(x < width)
+			precondition(y >= 0)
+			precondition(y < height)
 			return map[y * width + x]
 		}
 		set {
-			assert(x >= 0)
-			assert(x < width)
-			assert(y >= 0)
-			assert(y < height)
+			precondition(x >= 0)
+			precondition(x < width)
+			precondition(y >= 0)
+			precondition(y < height)
 			map[y * width + x] = newValue
 		}
 	}
@@ -245,11 +245,11 @@ struct OccupancyMap: Equatable {
 	
 	
 	mutating func copyLines(from: CountableRange<Int>, to: CountableRange<Int>) {
-		assert(from.count == to.count)
-		assert(from.lowerBound >= 0)
-		assert(from.upperBound <= height)
-		assert(to.lowerBound >= 0)
-		assert(to.upperBound <= height)
+		precondition(from.count == to.count)
+		precondition(from.lowerBound >= 0)
+		precondition(from.upperBound <= height)
+		precondition(to.lowerBound >= 0)
+		precondition(to.upperBound <= height)
 		
 		if to.lowerBound > from.lowerBound {
 			var srcLine = from.upperBound - 1
@@ -276,8 +276,8 @@ struct OccupancyMap: Equatable {
 	
 	
 	mutating func copyLine(from srcLine: Int, to dstLine: Int) {
-		assert((0..<height).contains(srcLine))
-		assert((0..<height).contains(dstLine))
+		precondition((0..<height).contains(srcLine))
+		precondition((0..<height).contains(dstLine))
 		
 		for x in 0..<width {
 			self[x, dstLine] = self[x, srcLine]
@@ -298,9 +298,9 @@ struct OccupancyMap: Equatable {
 	
 	/// Shifts the given line and all those above upwards by `count` lines, leaving empty lines behind.
 	mutating func shiftUp(startingLine: Int, count: Int) {
-		assert(startingLine >= 0)
-		assert(startingLine < height - 1)
-		assert(startingLine + count <= height)
+		precondition(startingLine >= 0)
+		precondition(startingLine < height - 1)
+		precondition(startingLine + count <= height)
 		
 		let numToCopy = height - (startingLine + count)
 		if numToCopy > 0 {
@@ -313,8 +313,8 @@ struct OccupancyMap: Equatable {
 	
 	/// Shifts the given line and all those above downwards by `count` lines, leaving empty lines behind.
 	private mutating func shiftDown(startingLine: Int, count: Int) {
-		assert(startingLine - count >= 0)
-		assert(startingLine <= height)
+		precondition(startingLine - count >= 0)
+		precondition(startingLine <= height)
 		
 		let numToCopy = height - startingLine
 		if numToCopy > 0 {
