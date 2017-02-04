@@ -62,102 +62,28 @@ class Game {
 	
 	
 	private func updateLocalPlayer(timing: UpdateTiming) {
-		func rotatingAction() -> PlayerInput? {
-			if inputMap[.rotateLeft].active  { return .rotateLeft }
-			if inputMap[.rotateRight].active { return .rotateRight }
-			if inputMap[.rotateLeft].activated  { return .rotateLeft }
-			if inputMap[.rotateRight].activated { return .rotateRight }
-			return nil
-		}
-		
-		func horizontalAction() -> PlayerInput? {
-			if inputMap[.moveLeft].active  { return .moveLeft }
-			if inputMap[.moveRight].active { return .moveRight }
-			if inputMap[.moveLeft].activated  { return .moveLeft }
-			if inputMap[.moveRight].activated { return .moveRight }
-			return nil
-		}
-		
-		
-		
 		guard state.localPlayer.state.isAlive else {
 			return
 		}
 		
-		if let action = rotatingAction() {
-			rotateFallingPiece(input: action, timing: timing)
+		if let action = inputMap.rotatingAction() {
+			actOnFallingPiece(input: action, timing: timing)
 		}
 		
-		if let action = horizontalAction() {
-			moveFallingPiece(input: action, timing: timing)
+		if let action = inputMap.horizontalMoveAction() {
+			actOnFallingPiece(input: action, timing: timing)
 		}
 		
-		if inputMap[.moveDown].activated {
-			moveFallingPieceDown(timing: timing)
+		if inputMap[.moveDown].activated || inputMap[.moveDown].active {
+			actOnFallingPiece(input: .moveDown, timing: timing)
 		}
 		
-		if inputMap[.drop].activated {
-			dropFallingPiece(timing: timing)
+		if inputMap[.drop].activated || inputMap[.drop].active {
+			actOnFallingPiece(input: .drop, timing: timing)
 		}
-		
 		
 		updateFallingPiece(timing: timing)
-		
-		
-		// TODO: Check for completed lines
-	}
-	
-	
-	
-	private func rotateFallingPiece(input: PlayerInput, timing: UpdateTiming) {
-		precondition(input == .rotateLeft || input == .rotateRight)
-		guard timing.now - state.lastRotationTime > Game.minimumTimeBetweenRotations else {
-			return
-		}
-		
-		let piece = state.localPlayer.state.currentPiece.proposed(by: input)
-		if state.localPlayer.state.board.doesPositionCollide(piece: piece) {
-			GameSound.rotateBlock.play()
-			state.localPlayer.state.currentPiece = piece
-			state.lastRotationTime = timing.now
-			
-			// TODO: tell server
-		}
-	}
-	
-	
-	
-	private func moveFallingPiece(input: PlayerInput, timing: UpdateTiming) {
-		precondition(input == .moveLeft || input == .moveRight)
-		guard timing.now - state.lastHorizontalMovementTime > Game.minimumTimeBetweenHorizontalMoves else {
-			return
-		}
-		
-		let piece = state.localPlayer.state.currentPiece.proposed(by: input)
-		if state.localPlayer.state.board.doesPositionCollide(piece: piece) {
-			GameSound.moveBlock.play()
-			state.localPlayer.state.currentPiece = piece
-			state.lastHorizontalMovementTime = timing.now
-			
-			// TODO: tell server
-		}
-	}
-	
-	
-	
-	private func moveFallingPieceDown(timing: UpdateTiming) {
-		guard timing.now - state.lastVerticalMovementTime > Game.minimumTimeBetweenVerticalMoves else {
-			return
-		}
-		
-		let piece = state.localPlayer.state.currentPiece.proposed(by: .moveDown)
-		if state.localPlayer.state.board.doesPositionCollide(piece: piece) {
-			GameSound.moveBlock.play()
-			state.localPlayer.state.currentPiece = piece
-			state.lastVerticalMovementTime = timing.now
-			
-			// TODO: tell server
-		}
+		checkForCompletedLines()
 	}
 	
 	
@@ -168,26 +94,90 @@ class Game {
 		}
 		
 		let piece = state.localPlayer.state.currentPiece.proposed(by: .moveDown)
-		if state.localPlayer.state.board.doesPositionCollide(piece: piece) {
-			dropFallingPiece(timing: timing)
+		if !state.localPlayer.state.board.doesPositionCollide(piece: piece) {
+			actOnFallingPiece(input: .drop, timing: timing)
 		} else {
 			state.localPlayer.state.currentPiece = piece
 			state.lastFallingTime = timing.now
-			
 			// TODO: tell server
 		}
 	}
 	
 	
 	
-	private func dropFallingPiece(timing: UpdateTiming) {
-		var piece = state.localPlayer.state.currentPiece
-		piece.position = state.localPlayer.state.board.finalPositionIfDropped(piece: state.localPlayer.state.currentPiece)
-		state.localPlayer.state.currentPiece = piece
-		state.lastFallingTime = timing.now
-		GameSound.dropBlock.play()
+	private func checkForCompletedLines() {
 		
-		// TODO: tell server
+	}
+	
+	
+	
+	private func actOnFallingPiece(input: PlayerInput, timing: UpdateTiming) {		
+		switch input {
+		case .moveLeft, .moveRight, .moveDown, .rotateLeft, .rotateRight:
+			if timingAllowsAction(input: input, timing: timing) {
+				let piece = state.localPlayer.state.currentPiece.proposed(by: input)
+				if !state.localPlayer.state.board.doesPositionCollide(piece: piece) {
+					playSound(for: input)
+					state.localPlayer.state.currentPiece = piece
+					updateTimingForAction(input: input, timing: timing)
+					// TODO: tell server
+				}	
+			}
+			
+		case .drop:
+			var piece = state.localPlayer.state.currentPiece
+			piece.position = state.localPlayer.state.board.finalPositionIfDropped(piece: state.localPlayer.state.currentPiece)
+			state.localPlayer.state.currentPiece = piece
+			state.lastFallingTime = timing.now
+			GameSound.dropBlock.play()
+			// TODO: tell server
+		}
+	}
+		
+		
+		
+	private func timingAllowsAction(input: PlayerInput, timing: UpdateTiming) -> Bool {
+		switch input {
+		case .moveLeft, .moveRight:
+			return timing.now - state.lastHorizontalMovementTime >= Game.minimumTimeBetweenHorizontalMoves
+		case .moveDown:
+			return timing.now - state.lastVerticalMovementTime >= Game.minimumTimeBetweenVerticalMoves
+		case .rotateLeft, .rotateRight:
+			return timing.now - state.lastRotationTime >= Game.minimumTimeBetweenRotations
+		default:
+			return true
+		}
+	}
+	
+	
+	
+	private func updateTimingForAction(input: PlayerInput, timing: UpdateTiming) {
+		switch input {
+		case .moveLeft, .moveRight:
+			state.lastHorizontalMovementTime = timing.now
+		case .moveDown:
+			state.lastVerticalMovementTime = timing.now
+		case .rotateLeft, .rotateRight:
+			state.lastRotationTime = timing.now
+		case .drop:
+			state.lastFallingTime = timing.now
+			state.lastVerticalMovementTime = timing.now - Game.minimumTimeBetweenVerticalMoves
+		}
+	}
+	
+	
+	
+	private func playSound(for input: PlayerInput) {
+		switch input {
+		case .moveLeft, .moveRight:
+			GameSound.moveBlock.play()
+		case .moveDown:
+			return
+		case .rotateLeft, .rotateRight:
+			GameSound.moveBlock.play()
+		case .drop:
+			GameSound.dropBlock.play()
+		}
 	}
 	
 	
@@ -246,10 +236,6 @@ struct GameState {
 			players[localPlayerID] = newValue
 		}
 	}
-	
-	
-	
-	// Mmmm… perhaps all of those actions/methods which manipulate the GameState which are in Game above should be mutating methods in GameState itself.
 	
 	
 	
@@ -367,7 +353,7 @@ Client - Game over
 
 
 extension Piece {
-	
+
 	func proposed(by input: PlayerInput) -> Piece {
 		var piece = self
 		
@@ -393,6 +379,25 @@ extension Piece {
 		
 		return piece
 	}
-	
 }
 
+
+
+extension PlayerInputMap {
+	
+	func rotatingAction() -> PlayerInput? {
+		if self[.rotateLeft].active  { return .rotateLeft }
+		if self[.rotateRight].active { return .rotateRight }
+		if self[.rotateLeft].activated  { return .rotateLeft }
+		if self[.rotateRight].activated { return .rotateRight }
+		return nil
+	}
+	
+	func horizontalMoveAction() -> PlayerInput? {
+		if self[.moveLeft].active  { return .moveLeft }
+		if self[.moveRight].active { return .moveRight }
+		if self[.moveLeft].activated  { return .moveLeft }
+		if self[.moveRight].activated { return .moveRight }
+		return nil
+	}
+}
