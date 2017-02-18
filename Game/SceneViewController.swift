@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  SceneViewController.swift
 //  MUT20XX
 //
 //  Copyright © 2017 iDevGames. All rights reserved.
@@ -9,7 +9,7 @@ import Cocoa
 import SpriteKit
 import GameplayKit
 
-class ViewController: NSViewController {
+class SceneViewController: NSViewController {
 
     @IBOutlet var skView: SKView!
     
