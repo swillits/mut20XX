@@ -59,6 +59,7 @@ class PlayerInputState {
 class PlayerInputMap {
 	fileprivate let inputs: [PlayerInput: PlayerInputState] = [
 		.moveDown:    PlayerInputState(keycode: 0),
+		.moveLeft:    PlayerInputState(keycode: 0),
 		.moveRight:   PlayerInputState(keycode: 0),
 		.rotateLeft:  PlayerInputState(keycode: 0),
 		.rotateRight: PlayerInputState(keycode: 0),

@@ -13,9 +13,9 @@ struct Board {
 	
 	static let width = 10
 	static let height = 20
-	static let initialPiecePosition = Piece.Position(x: 3, y: 20)
+	static let initialPiecePosition = Piece.Position(3, 20)
 	
-	fileprivate var map = OccupancyMap(width: width, height: height)
+	fileprivate(set) var map = OccupancyMap(width: width, height: height)
 	
 	
 	
@@ -38,8 +38,9 @@ struct Board {
 		precondition(!map.collides(map: piece.occupancyMap, x: piece.position.x, y: piece.position.y).contains(.wall), "The piece collides at the given position meaning the piece should have already been placed and this indicates an error.")
 		
 		for y in (Game.minPiecePosition.y ..< piece.position.y).reversed() {
-			if map.collides(map: piece.occupancyMap, x: piece.position.x, y: y).contains(.wall) {
-				return Piece.Position(x: piece.position.x, y: y + 1)
+			let collision = map.collides(map: piece.occupancyMap, x: piece.position.x, y: y) 
+			if collision.contains(.wall) || collision.contains(.block) {
+				return Piece.Position(piece.position.x, y + 1)
 			}
 		}
 		

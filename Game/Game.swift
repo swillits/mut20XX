@@ -13,10 +13,10 @@ import Foundation
 class Game {
 	private static let minimumTimeBetweenHorizontalMoves: TimeInterval = 0.1
 	private static let minimumTimeBetweenVerticalMoves: TimeInterval = 0.1
-	private static let normalTimeBetweenFalls: TimeInterval = 1.0
+	private static let normalTimeBetweenFalls: TimeInterval = 0.1
 	private static let minimumTimeBetweenRotations: TimeInterval = 0.05
-	static let minPiecePosition = Piece.Position(x: -4, y: -4)
-	static let maxPiecePosition = Piece.Position(x: Board.width, y: Board.height)
+	static let minPiecePosition = Piece.Position(-4, -4)
+	static let maxPiecePosition = Piece.Position(Board.width, Board.height)
 	
 	static let shared = Game()
 	var state: GameState!
@@ -28,7 +28,12 @@ class Game {
 	
 	
 	func newGame() {
-		let localPlayer = Player(id: "local", name: "Local Player")
+		var localPlayer = Player(id: "local", name: "Local Player")
+		localPlayer.state.score = 0
+		localPlayer.state.isAlive = true
+		localPlayer.state.ready = true
+		localPlayer.state.gameLoaded = true
+		
 		let players = [localPlayer] // + [...]
 		state = GameState(players: players, localPlayerID: localPlayer.id)
 		inputMap.reset()
@@ -100,7 +105,7 @@ class Game {
 		}
 		
 		let piece = state.localPlayer.state.currentPiece.proposed(by: .moveDown)
-		if !state.localPlayer.state.board.doesPositionCollide(piece: piece) {
+		if state.localPlayer.state.board.doesPositionCollide(piece: piece) {
 			actOnFallingPiece(input: .drop, timing: timing)
 		} else {
 			state.localPlayer.state.currentPiece = piece
@@ -292,13 +297,13 @@ extension Piece {
 		
 		switch input {
 		case .moveLeft:
-			piece.position = Piece.Position(x: piece.position.x - 1, y: piece.position.y)
+			piece.position = Piece.Position(piece.position.x - 1, piece.position.y)
 		
 		case .moveRight:
-			piece.position = Piece.Position(x: piece.position.x + 1, y: piece.position.y)
+			piece.position = Piece.Position(piece.position.x + 1, piece.position.y)
 			
 		case .moveDown:
-			piece.position = Piece.Position(x: piece.position.x, y: piece.position.y - 1)
+			piece.position = Piece.Position(piece.position.x, piece.position.y - 1)
 			
 		case .rotateLeft:
 			piece.rotation = piece.rotation.nextAnticlockwise()

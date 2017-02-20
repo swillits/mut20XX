@@ -1,5 +1,5 @@
 //
-//  PieceBlockNode.swift
+//  BlockNode.swift
 //  Project
 //
 //  Created by Seth Willits on 2/18/17.
@@ -10,12 +10,13 @@ import Foundation
 import SpriteKit
 
 
-class PieceBlockNode: SKSpriteNode {
+class BlockNode: SKSpriteNode {
 	
 	static let size: CGSize = CGSize(width: 24, height: 24)
 	
 	init(variety: BlockVariety? = nil) {
-		super.init(texture: nil, color: NSColor.clear, size: PieceBlockNode.size)
+		super.init(texture: nil, color: NSColor.clear, size: BlockNode.size)
+		self.anchorPoint = CGPoint.zero
 		self.variety = variety
 		updateAppearanceFromVariety()
 	}
@@ -50,4 +51,3 @@ class PieceBlockNode: SKSpriteNode {
 	}
 	
 }
-

@@ -21,7 +21,7 @@ struct Piece {
 	
 	
 	static var placeholder: Piece {
-		return Piece(shape: .I, position: Piece.Position(x: 0, y: 0), rotation: .north)
+		return Piece(shape: .I, position: Piece.Position(0, 0), rotation: .north)
 	}
 	
 	
@@ -33,6 +33,8 @@ struct Piece {
 		// because the names make no sense in lowercase
 		case I, J, L, O, S, T, Z
 		
+		static let width = 4
+		static let height = 4
 		var occupancyMap: OccupancyMap {
 			switch self {
 			case .I:
@@ -88,9 +90,16 @@ struct Piece {
 	
 	
 	// note that x and y can both be negative, and y can be greater than the height of the board
+	// 0, 0 is the bottom left valid cell in the board.
+	// Should either be Board.Position or top level
 	struct Position {
 		var x: Int
 		var y: Int
+		
+		init(_ x: Int, _ y: Int) {
+			self.x = x
+			self.y = y
+		}
 	}
 	
 }
