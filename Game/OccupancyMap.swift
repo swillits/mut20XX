@@ -33,17 +33,18 @@ enum Rotation: Int {
 		case .north:
 			return (x: position.x, y: position.y)
 		case .east:
-			return (x: size.h - 1 - position.y, y: position.x)
+			return (x: position.y, y: size.w - 1 - position.x)
 		case .south:
 			return (x: size.w - 1 - position.x, y: size.h - 1 - position.y)
 		case .west:
-			return (x: position.y, y: size.w - 1 - position.x)
+			return (x: size.h - 1 - position.y, y: position.x)
 		}
 	}
 	
 }
 
 /// A 2-dimensional grid of cells/blocks where a cell can be occupied or unoccupied. Occupied cells have accompanying data indicating what occupies it.
+/// Bottom-Left origin
 
 struct OccupancyMap: Equatable {
 	// maybe make generic as to what it contains, but perhaps that's too general and we always just want the same thing anyway so far. Could use a map of bools only, and then a sibling structure containing data for occupied cells
@@ -79,13 +80,16 @@ struct OccupancyMap: Equatable {
 	init(width: Int, height: Int, _ blocks: BlockVariety?...) {
 		self.width = width
 		self.height = height
-		self.map = blocks.map {
-			if let variety = $0 {
-				return .filled(variety: variety)
-			} else {
-				return .vacant
+		
+		map = Array(repeating: .vacant, count: width * height)
+		for tuple in blocks.enumerated() {
+			if let variety = tuple.element {
+				let x = tuple.offset % width
+				let y = (height - 1) - (tuple.offset / width)
+				map[y * width + x] = .filled(variety: variety)
 			}
 		}
+		
 	}
 	
 	
@@ -134,6 +138,24 @@ struct OccupancyMap: Equatable {
 	
 	
 	
+	func print() {
+		for y in (0 ..< height).reversed() {
+			var s = ""
+			for x in 0 ..< width {
+				let z = self[x, y]
+				switch z {
+				case .vacant:
+					s = s + "_ "
+				case let .filled(variety):
+					s = s + "\(variety) "
+				}
+			}
+			Swift.print(s)
+		}
+	}
+	
+	
+	
 	
 	// MARK: - Collision Detection
 	
@@ -170,8 +192,8 @@ struct OccupancyMap: Equatable {
 				var bounds: Bounds = []
 				if myX < 0       { bounds.insert(.west)  }
 				if myX >= width  { bounds.insert(.east)  }
-				if myY < 0       { bounds.insert(.north) }
-				if myY >= height { bounds.insert(.south) }
+				if myY < 0       { bounds.insert(.south) }
+				if myY >= height { bounds.insert(.north) }
 				
 				let existing: OverlaidCell
 				if bounds.isEmpty {

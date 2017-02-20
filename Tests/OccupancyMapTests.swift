@@ -37,7 +37,7 @@ class OccupancyMapTests: XCTestCase {
 			nil, nil, nil, nil,
 			nil, nil, nil, nil)
 		
-		board.insert(map: Piece.Shape.I.occupancyMap.rotated(to: .east), x: 0, y: 1)
+		board.insert(map: Piece.Shape.I.occupancyMap.rotated(to: .east), x: 0, y: -1)
 		XCTAssertEqual(board, OccupancyMap(width: 4, height: 4,
 			nil, nil, nil, nil,
 			nil, nil, nil, nil,
@@ -52,10 +52,13 @@ class OccupancyMapTests: XCTestCase {
 			 .a,  .a,  .a,  .a))
 		
 		let o = Piece.Shape.O.occupancyMap
-		XCTAssertEqual([.top               ], board.collides(map: o, x:  0, y: -2))
-		XCTAssertEqual([      .wall        ], board.collides(map: o, x:  2, y:  0))
 		XCTAssertEqual([             .block], board.collides(map: o, x:  0, y:  0))
-		XCTAssertEqual([.top, .wall, .block], board.collides(map: o, x: -2, y: -2))
+		XCTAssertEqual([.top               ], board.collides(map: o, x:  0, y:  2))
+		XCTAssertEqual([      .wall, .block], board.collides(map: o, x:  0, y: -2))
+		XCTAssertEqual([      .wall        ], board.collides(map: o, x:  2, y:  0))
+		XCTAssertEqual([.top, .wall, .block], board.collides(map: o, x: -2, y:  2))
+		XCTAssertEqual([.top, .wall        ], board.collides(map: o, x:  2, y:  2))
+		XCTAssertEqual([      .wall, .block], board.collides(map: o, x:  2, y: -2))
 	}
 
 	
@@ -64,10 +67,10 @@ class OccupancyMapTests: XCTestCase {
 			 .a, .b, .c, .d, .e, .f, .g)
 		
 		board.shiftUp(startingLine: 0, count: 1)
-		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7, nil, .a, .b, .c, .d, .e, .f))
+		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7, .b, .c, .d, .e, .f, .g, nil))
 		
 		board.shiftUp(startingLine: 3, count: 2)
-		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7, nil, .a, .b, nil, nil, .c, .d))
+		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7, .d, .e, nil, nil, .f, .g, nil))
 		
 		board = OccupancyMap(width: 1, height: 7,
 			 .a, .b, .c, .d, .e, .f, .g)
@@ -84,11 +87,11 @@ class OccupancyMapTests: XCTestCase {
 		
 		board.eraseLines([2, 3])
 		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7,
-			.a, .b, .e, .f, .g, nil, nil))
+			nil, nil, .a, .b, .c, .f, .g))
 		
 		board.eraseLines([0, 3])
 		XCTAssertEqual(board, OccupancyMap(width: 1, height: 7,
-			.b, .e, .g, nil, nil, nil, nil))
+			nil, nil, nil, nil, .a, .c, .f))
 		
 		board = OccupancyMap(width: 1, height: 7,
 			.a, .b, .c, .d, .e, .f, .g)
