@@ -16,7 +16,7 @@ enum Rotation: Int {
 	}
 	
 	func nextAnticlockwise() -> Rotation {
-		return Rotation(rawValue: (self.rawValue - 1) % 4)!
+		return Rotation(rawValue: (self.rawValue + 3) % 4)!
 	}
 	
 	func transform(size: (w: Int, h: Int)) -> (w: Int, h: Int) {
