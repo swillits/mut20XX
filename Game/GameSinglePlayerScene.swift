@@ -8,8 +8,6 @@
 import SpriteKit
 import GameplayKit
 
-
-
 class GameSinglePlayerScene: SKScene {
 	
 	
@@ -38,6 +36,22 @@ class GameSinglePlayerScene: SKScene {
 	// MARK: - Events
 	
 	override func keyDown(with event: NSEvent) {
+		switch event.keyCode {
+		case Keycode.a: //ANSI A
+			game.inputMap[.rotateLeft].activated = true
+		case Keycode.d: //ANSI D
+			game.inputMap[.rotateRight].activated = true
+		case Keycode.space:
+			game.inputMap[.drop].activated = true
+		case Keycode.downArrow:
+			game.inputMap[.moveDown].activated = true
+		case Keycode.leftArrow:
+			game.inputMap[.moveLeft].activated = true
+		case Keycode.rightArrow:
+			game.inputMap[.moveRight].activated = true			
+		default:
+			break
+		}
 //		switch event.keyCode {
 //		default:
 //			print("keyDown: \(event.characters!) keyCode: \(event.keyCode)")
