@@ -20,7 +20,7 @@ class MainMenuScene: SKScene, ButtonNodeResponderType {
 			let doors = SKTransition.doorsOpenVertical(withDuration: 0.5)
 			let gkscene = GKScene(fileNamed: "GameSinglePlayerScene")!
 			let scene = gkscene.rootNode as! GameSinglePlayerScene
-			view?.presentScene(scene, transition: doors)
+			view!.presentScene(scene, transition: doors)
 			
 		case .quit:
 			NSApp.terminate(nil)
