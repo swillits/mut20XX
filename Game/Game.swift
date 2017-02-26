@@ -13,7 +13,7 @@ import Foundation
 class Game {
 	private static let minimumTimeBetweenHorizontalMoves: TimeInterval = 0.1
 	private static let minimumTimeBetweenVerticalMoves: TimeInterval = 0.1
-	private static let normalTimeBetweenFalls: TimeInterval = 0.1
+	private static let normalTimeBetweenFalls: TimeInterval = 1.0
 	private static let minimumTimeBetweenRotations: TimeInterval = 0.05
 	static let minPiecePosition = Piece.Position(-4, -4)
 	static let maxPiecePosition = Piece.Position(Board.width, Board.height)
