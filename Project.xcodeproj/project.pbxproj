@@ -60,7 +60,7 @@
 		5DD129961E638083001FFDC0 /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD129951E638083001FFDC0 /* Dialog.swift */; };
 		5DD129981E6388C7001FFDC0 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD129971E6388C7001FFDC0 /* Preferences.swift */; };
 		5DF95A311E58E6B100F2817A /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DF95A301E58E6B100F2817A /* MainMenu.xib */; };
-		5DF95A331E58E6CF00F2817A /* SceneView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DF95A321E58E6CF00F2817A /* SceneView.xib */; };
+		5DF95A331E58E6CF00F2817A /* SceneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DF95A321E58E6CF00F2817A /* SceneViewController.xib */; };
 		5DF95A351E59274000F2817A /* MainMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5DF95A341E59274000F2817A /* MainMenuScene.sks */; };
 		5DF95A371E59278900F2817A /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF95A361E59278900F2817A /* MainMenuScene.swift */; };
 		5DF95A391E592B9400F2817A /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF95A381E592B9400F2817A /* ButtonNode.swift */; };
@@ -139,7 +139,7 @@
 		5DD129951E638083001FFDC0 /* Dialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
 		5DD129971E6388C7001FFDC0 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Preferences.swift; path = ../Preferences.swift; sourceTree = "<group>"; };
 		5DF95A301E58E6B100F2817A /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MainMenu.xib; path = Game/MainMenu.xib; sourceTree = "<group>"; };
-		5DF95A321E58E6CF00F2817A /* SceneView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SceneView.xib; path = Game/SceneView.xib; sourceTree = "<group>"; };
+		5DF95A321E58E6CF00F2817A /* SceneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SceneViewController.xib; path = Game/SceneViewController.xib; sourceTree = "<group>"; };
 		5DF95A341E59274000F2817A /* MainMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenuScene.sks; sourceTree = "<group>"; };
 		5DF95A361E59278900F2817A /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		5DF95A381E592B9400F2817A /* ButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
@@ -255,7 +255,7 @@
 			isa = PBXGroup;
 			children = (
 				5DF95A301E58E6B100F2817A /* MainMenu.xib */,
-				5DF95A321E58E6CF00F2817A /* SceneView.xib */,
+				5DF95A321E58E6CF00F2817A /* SceneViewController.xib */,
 				5DD1298E1E6378BA001FFDC0 /* HostGameViewController.xib */,
 				5DD129921E6378CC001FFDC0 /* JoinGameViewController.xib */,
 				5D849A7F1E3BB1260027AF00 /* AppDelegate.swift */,
@@ -432,7 +432,7 @@
 				5D849AD21E3BE6100027AF00 /* CompleteLine.m4a in Resources */,
 				5DD129901E6378BA001FFDC0 /* HostGameViewController.xib in Resources */,
 				5D849ACF1E3BE6100027AF00 /* ButtonHover.m4a in Resources */,
-				5DF95A331E58E6CF00F2817A /* SceneView.xib in Resources */,
+				5DF95A331E58E6CF00F2817A /* SceneViewController.xib in Resources */,
 				5D849A841E3BB1260027AF00 /* Actions.sks in Resources */,
 				5D849AD81E3BE6100027AF00 /* RotateBlock.m4a in Resources */,
 				5D849AD71E3BE6100027AF00 /* NewLevel.m4a in Resources */,

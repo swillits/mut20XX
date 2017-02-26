@@ -13,12 +13,7 @@ class SceneViewController: NSViewController {
 
     @IBOutlet var skView: SKView!
     
-	
-	override var nibName: String? {
-		return "SceneView"
-	}
-	
-	
+
     override func viewDidLoad() {
         super.viewDidLoad()
         skView.showsFPS = true

@@ -19,7 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		Prefs.registerDefaults(Prefs.gameDefaults)
-		window.contentView?.addSubview(sceneViewController.view)
+		window.contentView!.addSubview(sceneViewController.view)
 		sceneViewController.showMainMenu()
 	}
 	
