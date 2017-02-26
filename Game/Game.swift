@@ -14,7 +14,7 @@ class Game {
 	private static let minimumTimeBetweenHorizontalMoves: TimeInterval = 0.1
 	private static let minimumTimeBetweenVerticalMoves: TimeInterval = 0.1
 	private static let normalTimeBetweenFalls: TimeInterval = 1.0
-	private static let minimumTimeBetweenRotations: TimeInterval = 0.05
+	private static let minimumTimeBetweenRotations: TimeInterval = 0.15
 	static let minPiecePosition = Piece.Position(-4, -4)
 	static let maxPiecePosition = Piece.Position(Board.width, Board.height)
 	
@@ -23,6 +23,18 @@ class Game {
 	
 	let inputMap = PlayerInputMap()
 	private var shapeGenerator = Piece.Shape.Generator()
+	
+	
+	
+	init() {
+		// TODO: Connect to prefs and UI
+		inputMap.setTriggers([.keycode(Keycode.space)],      for: .drop)
+		inputMap.setTriggers([.keycode(Keycode.downArrow)],  for: .moveDown)
+		inputMap.setTriggers([.keycode(Keycode.leftArrow)],  for: .moveLeft)
+		inputMap.setTriggers([.keycode(Keycode.rightArrow)], for: .moveRight)
+		inputMap.setTriggers([.keycode(Keycode.a)],          for: .rotateLeft)
+		inputMap.setTriggers([.keycode(Keycode.d)],          for: .rotateRight)
+	}
 	
 	
 	

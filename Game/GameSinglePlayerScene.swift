@@ -36,26 +36,21 @@ class GameSinglePlayerScene: SKScene {
 	// MARK: - Events
 	
 	override func keyDown(with event: NSEvent) {
-		switch event.keyCode {
-		case Keycode.a: //ANSI A
-			game.inputMap[.rotateLeft].activated = true
-		case Keycode.d: //ANSI D
-			game.inputMap[.rotateRight].activated = true
-		case Keycode.space:
-			game.inputMap[.drop].activated = true
-		case Keycode.downArrow:
-			game.inputMap[.moveDown].activated = true
-		case Keycode.leftArrow:
-			game.inputMap[.moveLeft].activated = true
-		case Keycode.rightArrow:
-			game.inputMap[.moveRight].activated = true			
-		default:
-			break
+		guard !event.isARepeat else { return }
+		if let trigger = PlayerInputTrigger.from(event) {
+			if let input = game.inputMap.input(for: trigger) {
+				game.inputMap.activate(input, time: Date.timeIntervalSinceReferenceDate)
+			}
 		}
-//		switch event.keyCode {
-//		default:
-//			print("keyDown: \(event.characters!) keyCode: \(event.keyCode)")
-//		}
+	}
+	
+	
+	override func keyUp(with event: NSEvent) {
+		if let trigger = PlayerInputTrigger.from(event) {
+			if let input = game.inputMap.input(for: trigger) {
+				game.inputMap.deactivate(input, time: Date.timeIntervalSinceReferenceDate)
+			}
+		}
 	}
 	
 	

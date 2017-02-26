@@ -5,7 +5,7 @@
 //  Copyright © 2017 iDevGames. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 
 enum PlayerInput: Int {
@@ -22,11 +22,6 @@ enum PlayerInput: Int {
 
 class PlayerInputState {
 	
-	/// Keyboard keycode to trigger it.
-	// Could be pulled out of here, made into a struct with device + button IDs suitable for HID etc, and then have multiple triggers for each Input.
-	var keycode: UInt16
-	
-	
 	/// True if the input was active at some point before processing the current frame. Cleared after each frame is processed.
 	var activated: Bool = false
 	
@@ -41,11 +36,6 @@ class PlayerInputState {
 	var duration: TimeInterval = 0.0
 	
 	
-	init(keycode: UInt16) {
-		self.keycode = keycode
-	}
-	
-	
 	func reset() {
 		activated = false
 		active = false
@@ -56,14 +46,29 @@ class PlayerInputState {
 
 
 
+enum PlayerInputTrigger: Equatable {
+	case keycode(UInt16)
+	// mouse button
+	// HID event etc
+	
+	static func ==(lhs: PlayerInputTrigger, rhs: PlayerInputTrigger) -> Bool {
+		switch (lhs, rhs) {
+		case (let .keycode(l), let .keycode(r)):
+			return l == r
+		}
+	}
+}
+
+
+
 class PlayerInputMap {
-	fileprivate let inputs: [PlayerInput: PlayerInputState] = [
-		.moveDown:    PlayerInputState(keycode: 0),
-		.moveLeft:    PlayerInputState(keycode: 0),
-		.moveRight:   PlayerInputState(keycode: 0),
-		.rotateLeft:  PlayerInputState(keycode: 0),
-		.rotateRight: PlayerInputState(keycode: 0),
-		.drop:        PlayerInputState(keycode: 0)
+	private let inputs: [PlayerInput: PlayerInputState] = [
+		.moveDown:    PlayerInputState(),
+		.moveLeft:    PlayerInputState(),
+		.moveRight:   PlayerInputState(),
+		.rotateLeft:  PlayerInputState(),
+		.rotateRight: PlayerInputState(),
+		.drop:        PlayerInputState()
 	]
 	
 	
@@ -88,9 +93,60 @@ class PlayerInputMap {
 			state.reset()
 		}
 	}
+	
+	
+	func activate(_ input: PlayerInput, time: TimeInterval) {
+		self[input].active = true
+		self[input].activated = true
+		self[input].timestamp = time
+		self[input].duration = 0.0
+	}
+	
+	
+	func deactivate(_ input: PlayerInput, time: TimeInterval) {
+		self[input].active = false
+		self[input].duration = time - self[input].timestamp
+	}
+	
+	
+	
+	// -----------
+	
+	private var triggersMap: [PlayerInput: [PlayerInputTrigger]] = [:] 
+	
+	func triggers(for pi: PlayerInput) -> [PlayerInputTrigger] {
+		return triggersMap[pi] ?? []
+	}
+	
+	
+	func setTriggers(_ triggers: [PlayerInputTrigger], for pi: PlayerInput) {
+		triggersMap[pi] = triggers
+	}
+	
+	
+	func input(for trigger: PlayerInputTrigger) -> PlayerInput? {
+		for (input, triggers) in triggersMap {
+			if triggers.contains(trigger) {
+				return input
+			}
+		}
+		
+		return nil
+	}
 }
 
 
 
-
+extension PlayerInputTrigger {
+	
+	static func from(_ event: NSEvent) -> PlayerInputTrigger? {
+		switch event.type {
+		case .keyDown, .keyUp:
+			return .keycode(event.keyCode)
+		default:
+			return nil
+		}
+	}
+	
+}
 
