@@ -101,7 +101,7 @@ class Game {
 			actOnFallingPiece(input: .moveDown, timing: timing)
 		}
 		
-		if inputMap[.drop].activated || inputMap[.drop].active {
+		if inputMap[.drop].activated {
 			actOnFallingPiece(input: .drop, timing: timing)
 		}
 		
