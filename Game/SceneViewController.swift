@@ -21,22 +21,14 @@ class SceneViewController: NSViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-		//view.ignoresSiblingOrder = true
-		skView.showsFPS = true
+        skView.showsFPS = true
 		skView.showsNodeCount = true
     }
-	
 	
 	
 	func showMainMenu() {
 		let scene = GKScene(fileNamed: "MainMenuScene")!
 		let sceneNode = scene.rootNode as! MainMenuScene
-		
-		// Copy gameplay related content over to the scene
-//		sceneNode.entities = scene.entities
-//		sceneNode.graphs = scene.graphs
-		
 		sceneNode.scaleMode = .aspectFill
 		skView.presentScene(sceneNode)
 	}
