@@ -13,9 +13,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	@IBOutlet var window: NSWindow!
 	var sceneViewController = SceneViewController()
+	var hostGameViewController = HostGameViewController()
+	var joinGameViewController = JoinGameViewController()
 	
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
+		Prefs.registerDefaults(Prefs.gameDefaults)
 		window.contentView?.addSubview(sceneViewController.view)
 		sceneViewController.showMainMenu()
 	}
@@ -26,7 +29,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	
-	@IBAction func newGame(_ sender: Any?) {
+	@IBAction func hostGame(_ sender: AnyObject?) {
+		let dialog = Dialog(contentViewController: hostGameViewController)
+		if dialog.runModal() == NSModalResponseOK {
+			
+		}
+	}
+	
+	@IBAction func joinGame(_ sender: AnyObject?) {
 		
 	}
 }

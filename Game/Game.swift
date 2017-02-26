@@ -351,3 +351,19 @@ extension PlayerInputMap {
 		return nil
 	}
 }
+
+
+
+
+extension Prefs {
+	static let playerName = Pref<String>("playerName")
+	static let serverPort = Pref<Int>("serverPort")
+	
+	static var gameDefaults: [String: AnyObject] {
+		return [
+			playerName.key: "UnnamedPlayer" as AnyObject,
+			serverPort.key: 2247 as AnyObject
+		]
+	}
+}
+
