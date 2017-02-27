@@ -71,7 +71,7 @@ class BinaryStream {
 	
 	// MARK: - Writing
 	
-	func writeData(_ data: Data) throws {
+	func write(data: Data) throws {
 		try destination.write(data)
 	}
 	
