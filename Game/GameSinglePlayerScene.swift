@@ -13,7 +13,7 @@ class GameSinglePlayerScene: SKScene {
 	
 	private var bgNode: SKNode!
 	private var boardNode: BoardNode!
-	private var game = Game.shared
+	private var game: ClientGame! = nil
 	
 	
 	private var hasLoadedScene = false
@@ -69,7 +69,7 @@ class GameSinglePlayerScene: SKScene {
 		defer { lastUpdateTime = currentTime }
 		
 		
-		let timing = Game.UpdateTiming(now: currentTime, delta: currentTime - lastUpdateTime)
+		let timing = ClientGame.UpdateTiming(now: currentTime, delta: currentTime - lastUpdateTime)
 		game.update(timing: timing)
 		
 		

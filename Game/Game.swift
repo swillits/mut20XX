@@ -8,18 +8,21 @@
 import Foundation
 
 
-
-/// Persistent object across games, on the client
-class Game: NetConnectionDelegate {
-	private static let minimumTimeBetweenHorizontalMoves: TimeInterval = 0.1
-	private static let minimumTimeBetweenVerticalMoves: TimeInterval = 0.1
-	private static let normalTimeBetweenFalls: TimeInterval = 1.0
-	private static let minimumTimeBetweenRotations: TimeInterval = 0.15
+struct Game {
+	static let minimumTimeBetweenHorizontalMoves: TimeInterval = 0.1
+	static let minimumTimeBetweenVerticalMoves: TimeInterval = 0.1
+	static let normalTimeBetweenFalls: TimeInterval = 1.0
+	static let minimumTimeBetweenRotations: TimeInterval = 0.15
+	
+	static let maxPlayers = 5
 	static let minPiecePosition = Piece.Position(-4, -4)
 	static let maxPiecePosition = Piece.Position(Board.width, Board.height)
-	static let maxPlayers = 5
+}
+
+
+/// Persistent object across games, on the client
+class ClientGame: NetConnectionDelegate {
 	
-	static let shared = Game()
 	var state: GameState!
 	
 	let inputMap = PlayerInputMap()

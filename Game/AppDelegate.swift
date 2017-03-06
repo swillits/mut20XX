@@ -17,6 +17,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	var joinGameViewController = JoinGameViewController()
 	
 	
+	var server: ServerGame? = nil
+	var client: ClientGame? = nil
+	
+	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		Prefs.registerDefaults(Prefs.gameDefaults)
 		window.contentView!.addSubview(sceneViewController.view)
@@ -26,6 +30,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
 	@IBAction func hostGame(_ sender: AnyObject?) {
+		precondition(server == nil)
+		server = ServerGame() 
+		
 		let hgvc = hostGameViewController
 		let dialog = Dialog(contentViewController: hgvc)
 		if dialog.runModal() == NSModalResponseOK {
@@ -34,8 +41,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			
 			// Start the server
 			do {
-				try Server.shared.start(port: port)
+				try server!.start(port: port)
 			} catch let error {
+				server = nil
 				NSApp.presentError(error as NSError)
 			}
 			
@@ -52,24 +60,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
 	func joinGame(host: String, port: UInt16, playerName: String) {
+		precondition(client == nil)
+		
 		// TODO: What about rentry during a connection?? (Test with the wrong port, and it'll take a long time to connect.)
 		
 		// Maybe not have a shared instance ...
-		Game.shared.newGame()
+		client = ClientGame()
+		client!.newGame()
 		
 		
 		// TODO: in the future, perhaps this join method should have a handler as well.
 		// The caller(?) should have the ability to show a "Connecting" screen, or
 		// disable the Connect/Join button...
-		Game.shared.connect(to: host, port: port, playerName: playerName) { (error: Error?) in
+		client!.connect(to: host, port: port, playerName: playerName) { (error: Error?) in
 			if let error = error {
 				NSBeep()
 				print("\(error)")
-				
-				//Game.shared.reset() / = nil ?
-				
+				client = nil
 			} else {
-				
 				// TODO: transition to lobby scene
 			}
 		}

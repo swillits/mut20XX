@@ -10,9 +10,7 @@ import Foundation
 
 
 /// Manages all clients, and the server's understanding of the game state
-class Server: NetConnectionDelegate {
-	static let shared = Server()
-	
+class ServerGame: NetConnectionDelegate {
 	fileprivate var clients: [ServerClient] = []
 	private var connectionToClientMap: [NetConnection: ServerClient] = [:]
 	private var idForNextClient = 1
@@ -202,7 +200,7 @@ class Server: NetConnectionDelegate {
 
 
 // MARK: - Game State
-extension Server {
+extension ServerGame {
 	
 	fileprivate struct GameState {
 		var phase: Phase = .lobby
@@ -265,7 +263,7 @@ extension Server {
 		}
 		
 		
-		var rejectionReason: Server.DropReason? = nil
+		var rejectionReason: ServerGame.DropReason? = nil
 		
 		
 		// -- Read Message --
@@ -467,7 +465,7 @@ extension Server {
 	
 	// MARK: - Outgoing
 	
-	private func messageForDroppingConnection(reason: Server.DropReason) -> NetMessage {
+	fileprivate func messageForDroppingConnection(reason: ServerGame.DropReason) -> NetMessage {
 		let msg = NetMessage(type: NetMessage.MsgType.playerConnection, subtype: NetMessage.PlayerConnectionSubtype.denied)
 		msg.write(int8: Int8(reason.rawValue))
 		return msg
