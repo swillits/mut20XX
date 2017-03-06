@@ -36,6 +36,13 @@ class NetConnection: NSObject, GCDAsyncSocketDelegate {
 	private var packets: [NetPacket] = []
 	
 	
+	override init() {
+		socket = GCDAsyncSocket()
+		super.init()
+		socket.delegate = self
+	}
+	
+	
 	init(socket: GCDAsyncSocket) {
 		self.socket = socket
 		super.init()

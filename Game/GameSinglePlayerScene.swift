@@ -73,7 +73,7 @@ class GameSinglePlayerScene: SKScene {
 		game.update(timing: timing)
 		
 		
-		boardNode.board = game.state.localPlayer.state.board
-		boardNode.fallingPiece = game.state.localPlayer.state.currentPiece
+		boardNode.board = game.state.localPlayer.board
+		boardNode.fallingPiece = game.state.localPlayer.currentPiece
 	}
 }

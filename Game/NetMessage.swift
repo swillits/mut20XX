@@ -12,44 +12,44 @@ class NetMessage {
 	
 	// MARK: - Message Types
 	
-	enum MsgType: Int {
-		case generic
-		case playerConnection
-		case general
-		case lobby
-		case game
-		case clientMessage
+	struct MsgType {
+		static let playerConnection = 1
+		static let general = 2
+		static let lobby = 3
+		static let game = 4
+//		static let clientMessage = 4
+//		static let generic = 5
 	}
 	
 	
-	enum PlayerConnectionSubtype: Int {
-		case request
-		case granted
-		case denied
+	struct PlayerConnectionSubtype {
+		static let request = 1
+		static let granted = 2
+		static let denied  = 3
 	}
 	
-	enum GeneralSubtype: Int {
-		case playersInfo
+	struct GeneralSubtype {
+		static let playersInfo = 1
 	}
 	
-	enum LobbySubtype: Int {
-		case changedReady
+	struct LobbySubtype {
+		static let changedReady = 1
 		//hostRequestsStart// host client -> server
 	}
 	
-	enum MsgSubtype: Int {
-		case prepare
-		case isPrepared
-		case start
+	struct GameSubtype {
+		static let prepare = 1
+		static let isPrepared = 2
+		static let start = 3
 		
-		case gameOver
-		case playerDied
-		case shapes
-		case embedShape
-		case completedRows
-		case transferRows
+		static let gameOver = 4
+		static let playerDied = 5
+		static let shapes = 6
+		static let embedShape = 7
+		static let completedRows = 8 
+		static let transferRows = 9
 		
-		case returnToLobby
+		static let returnToLobby = 10
 	}
 	
 	
@@ -61,11 +61,11 @@ class NetMessage {
 	private let dd: BinaryStream.DataDestination
 	private let bs: BinaryStream
 	
-	var type: MsgType
-	var subtype: MsgSubtype
+	var type: Int
+	var subtype: Int
 	
 	
-	init(type: MsgType, subtype: MsgSubtype) {
+	init(type: Int, subtype: Int) {
 		self.type = type
 		self.subtype = subtype
 		
@@ -74,8 +74,8 @@ class NetMessage {
 		bs = BinaryStream(destination: dd)
 		bs.littleEndian = true
 		
-		write(int16: Int16(type.rawValue))
-		write(int16: Int16(subtype.rawValue))
+		write(int16: Int16(type))
+		write(int16: Int16(subtype))
 	}
 	
 	
@@ -85,14 +85,19 @@ class NetMessage {
 		bs = BinaryStream(destination: dd)
 		bs.littleEndian = true
 		
-		type = NetMessage.MsgType(rawValue: Int(try! bs.readInt16()))!
-		subtype = NetMessage.MsgSubtype(rawValue: Int(try! bs.readInt16()))!
+		type = Int(try! bs.readInt16())
+		subtype = Int(try! bs.readInt16())
 	}
 	
 	
 	
 	
 	// MARK: - Writing
+	
+	func data() -> Data {
+		return dd.data as Data
+	}
+	
 	
 	func write(data: Data) {
 		precondition(isWritable)
@@ -178,6 +183,12 @@ class NetMessage {
 	}
 	
 	
+	func write(string: String) {
+		precondition(isWritable)
+		try! bs.writeUTF8String(string)
+	}
+	
+	
 	
 	// MARK: - Reading
 	
@@ -256,6 +267,12 @@ class NetMessage {
 	func readInt64() -> Int64 {
 		precondition(!isWritable)
 		return try! bs.readInt64()
+	}
+	
+	
+	func readString() -> String {
+		precondition(!isWritable)
+		return try! bs.readUTF8String()
 	}
 }
 

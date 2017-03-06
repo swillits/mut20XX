@@ -9,27 +9,21 @@ import Foundation
 
 
 
-typealias PlayerID = String
-
 struct Player {
-	var id: PlayerID
+	var clientID: ClientID
 	var name: String
-	var state = PlayerState()
 	
-	init(id: PlayerID, name: String) {
-		self.id = id
-		self.name = name
-	}
-}
-
-
-struct PlayerState {
 	var board = Board() 
 	var score: Int = 0
 	var isAlive: Bool = false
-	var ready: Bool = false
-	var gameLoaded: Bool = false
+	var isReady: Bool = false
+	var gameIsPrepared: Bool = false
 	
 	var currentPiece: Piece = Piece.placeholder
 	var nextPiece: Piece = Piece.placeholder
+	
+	init(name: String, clientID: ClientID) {
+		self.name = name
+		self.clientID = clientID
+	}
 }

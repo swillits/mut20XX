@@ -9,14 +9,15 @@ import Foundation
 
 
 
-/// Persistent object across games
-class Game {
+/// Persistent object across games, on the client
+class Game: NetConnectionDelegate {
 	private static let minimumTimeBetweenHorizontalMoves: TimeInterval = 0.1
 	private static let minimumTimeBetweenVerticalMoves: TimeInterval = 0.1
 	private static let normalTimeBetweenFalls: TimeInterval = 1.0
 	private static let minimumTimeBetweenRotations: TimeInterval = 0.15
 	static let minPiecePosition = Piece.Position(-4, -4)
 	static let maxPiecePosition = Piece.Position(Board.width, Board.height)
+	static let maxPlayers = 5
 	
 	static let shared = Game()
 	var state: GameState!
@@ -40,14 +41,18 @@ class Game {
 	
 	
 	func newGame() {
-		var localPlayer = Player(id: "local", name: "Local Player")
-		localPlayer.state.score = 0
-		localPlayer.state.isAlive = true
-		localPlayer.state.ready = true
-		localPlayer.state.gameLoaded = true
 		
-		let players = [localPlayer] // + [...]
-		state = GameState(players: players, localPlayerID: localPlayer.id)
+		state = GameState()
+		
+		state.localPlayer.clientID = 0
+		state.localPlayer.name = "Local Player"
+		
+		state.localPlayer.score = 0
+		state.localPlayer.isAlive = true
+		state.localPlayer.isReady = true
+		state.localPlayer.gameIsPrepared = true
+		
+		
 		inputMap.reset()
 		advanceLocalPlayerPiece()
 		advanceLocalPlayerPiece()
@@ -56,6 +61,85 @@ class Game {
 	
 	
 	
+	// MARK: - Connection to Server
+	
+	private var connection: NetConnection? = nil
+	private var clientStatus: ClientStatus = .uninitialized
+	private var connectedAtTime: TimeInterval = 0.0
+	private var lastPacketAtTime: TimeInterval = 0.0
+	private var connectHandler: ((Error?) -> ())? = nil
+	
+	enum ClientStatus {
+		case uninitialized
+		case disconnected       // not talking to a server
+		case connected			// socket connected but the player is not yet accepted 
+		case joined				// player is now connected, nothing more
+		case loading			// -- only during cgame initialization, never during main loop --
+		case primed				// got gamestate, waiting for first frame
+		case active				// game views should be displayed 
+	}
+	
+	
+	func connect(to serverAddress: String, port: UInt16, playerName: String, handler: (Error?) -> ()) {
+		connection = NetConnection()
+		connection?.delegate = self
+		try! connection?.connect(host: serverAddress, port: port, timeout: 10.0)
+	}
+	
+	
+	func disconnect() {
+		clientStatus = .disconnected
+		
+		connection?.disconnectAfterWriting()
+		connection?.delegate = nil
+		connection = nil
+		
+		// TODO ... go back to previous scene
+		// display reasonToDisplay
+		// [[GBSceneManager sharedManager] popScene]; // ??
+	}
+
+	
+	
+	func connectionDidConnect(_ connection: NetConnection) {
+		print("[Client] did connect")
+		
+		if let handler = connectHandler {
+			handler(nil)
+			connectHandler = nil
+		}
+		
+		connectedAtTime = Date.timeIntervalSinceReferenceDate
+		lastPacketAtTime = connectedAtTime
+		clientStatus = .connected
+		
+		// Send Player info
+		//sendMessage(messageAfterConnecting())
+	}
+	
+	
+	func connectionDidDisconnect(_ connection: NetConnection, error: Error?) {
+		if let error = error {
+			print("[Client] Disconnected from server because of error %@", error)
+		} else {
+			print("[Client] Disconnected from server")
+		}
+		
+		clientStatus = .disconnected
+		
+		if let handler = connectHandler {
+			handler(error)
+			connectHandler = nil
+		}
+	}
+	
+	
+	
+	
+	
+	
+	// --------------
+	
 	func start() {
 		state.phase = .playing
 	}
@@ -63,6 +147,21 @@ class Game {
 	
 	
 	func update(timing: UpdateTiming) {
+		
+		// Check for messages from server
+//		[mConnectionToServer queueRead];
+//		if ([mConnectionToServer packetCount]) {
+//			mTimeOfLastPacket = GBGetCurrentTime();
+//			[self processPackets:[mConnectionToServer popPackets]];
+//		}
+		
+		// Drop the connection if we haven't received an update in a long time... (only needed if using UDP)
+//		if ((GBGetCurrentTime() - mConnectedAtTime > 60.0) || (GBGetCurrentTime() - mTimeOfLastPacket > 30.0)) {
+//			//[self dropClient:client reason:@"Haven't heard from you in 30 seconds."];
+//		}
+		
+		
+		
 		switch state.phase {
 		case .prepping:
 			
@@ -85,7 +184,7 @@ class Game {
 	
 	
 	private func updateLocalPlayer(timing: UpdateTiming) {
-		guard state.localPlayer.state.isAlive else {
+		guard state.localPlayer.isAlive else {
 			return
 		}
 		
@@ -116,11 +215,11 @@ class Game {
 			return
 		}
 		
-		let piece = state.localPlayer.state.currentPiece.proposed(by: .moveDown)
-		if state.localPlayer.state.board.doesPositionCollide(piece: piece) {
+		let piece = state.localPlayer.currentPiece.proposed(by: .moveDown)
+		if state.localPlayer.board.doesPositionCollide(piece: piece) {
 			actOnFallingPiece(input: .drop, timing: timing)
 		} else {
-			state.localPlayer.state.currentPiece = piece
+			state.localPlayer.currentPiece = piece
 			state.lastFallingTime = timing.now
 			// TODO: tell server
 		}
@@ -129,7 +228,7 @@ class Game {
 	
 	
 	private func checkForCompletedLines() {
-		let linesRemoved = state.localPlayer.state.board.removeCompletedLines()
+		let linesRemoved = state.localPlayer.board.removeCompletedLines()
 		if !linesRemoved.isEmpty {
 			if linesRemoved.count == 0 {
 				GameSound.completeFourLines.play()
@@ -147,10 +246,10 @@ class Game {
 		switch input {
 		case .moveLeft, .moveRight, .moveDown, .rotateLeft, .rotateRight:
 			if timingAllowsAction(input: input, timing: timing) {
-				let piece = state.localPlayer.state.currentPiece.proposed(by: input)
-				if !state.localPlayer.state.board.doesPositionCollide(piece: piece) {
+				let piece = state.localPlayer.currentPiece.proposed(by: input)
+				if !state.localPlayer.board.doesPositionCollide(piece: piece) {
 					playSound(for: input)
-					state.localPlayer.state.currentPiece = piece
+					state.localPlayer.currentPiece = piece
 					updateTimingForAction(input: input, timing: timing)
 					// TODO: tell server
 				}	
@@ -164,21 +263,21 @@ class Game {
 
 			
 		case .drop:
-			var piece = state.localPlayer.state.currentPiece
-			piece.position = state.localPlayer.state.board.finalPositionIfDropped(piece: state.localPlayer.state.currentPiece)
+			var piece = state.localPlayer.currentPiece
+			piece.position = state.localPlayer.board.finalPositionIfDropped(piece: state.localPlayer.currentPiece)
 			advanceLocalPlayerPiece()
 			state.lastFallingTime = timing.now
 			// TODO: tell server
 			
 			
-			if state.localPlayer.state.board.doesPieceSpillOverTop(piece: piece) {
+			if state.localPlayer.board.doesPieceSpillOverTop(piece: piece) {
 				GameSound.collision.play()
-				state.localPlayer.state.isAlive = false
+				state.localPlayer.isAlive = false
 			} else {
 				GameSound.dropBlock.play()
 			}
 			
-			state.localPlayer.state.board.perform(action: .placePiece(piece))
+			state.localPlayer.board.perform(action: .placePiece(piece))
 		}
 	}
 		
@@ -231,8 +330,8 @@ class Game {
 	
 	
 	private func advanceLocalPlayerPiece() {
-		state.localPlayer.state.currentPiece = state.localPlayer.state.nextPiece
-		state.localPlayer.state.nextPiece = Piece(shape: shapeGenerator.nextShape(), position: Board.initialPiecePosition, rotation: .north)
+		state.localPlayer.currentPiece = state.localPlayer.nextPiece
+		state.localPlayer.nextPiece = Piece(shape: shapeGenerator.nextShape(), position: Board.initialPiecePosition, rotation: .north)
 	}
 	
 	
@@ -250,48 +349,24 @@ class Game {
 
 
 
-/// The state of the current game.
 struct GameState {
 	
-	// Shared values for all clients
-	// ---------------------------------------------------
 	// var levelNumber: Int
 	// var gameRules: Rules -- until someone dies, or first to X lines complete, etc
-	var players: [PlayerID: Player]
 	
-	// --------- Local-client-only state ------------------
-	// When server/client split happens, this'll go somewhere better
-	let localPlayerID: String
+	var localPlayer: Player = Player(name: "", clientID: 0)
+	var players: [Player] = []
+	
 	var phase: Phase = .prepping
 	var lastHorizontalMovementTime: TimeInterval = 0.0
 	var lastVerticalMovementTime: TimeInterval = 0.0
 	var lastRotationTime: TimeInterval = 0.0
 	var lastFallingTime: TimeInterval = 0.0
-	// -----------------------------------------------------
 	
 	
-	init(players: [Player], localPlayerID: PlayerID) {
-		self.localPlayerID = localPlayerID
-		self.players = {
-			var dict: [PlayerID: Player] = [:]
-			for player in players {
-				dict[player.id] = player
-			}
-			return dict
-		}()
+	init() {
+		
 	}
-	
-	
-	// Sure seems like this may be quite inefficient, where updating any state in the local player has to go through this hashing, but the syntax is convenient. It could be stored outside of `players` too, but perhaps that'll make looping annoying. Heading down this route for now.
-	var localPlayer: Player {
-		get {
-			return players[localPlayerID]!
-		}
-		set {
-			players[localPlayerID] = newValue
-		}
-	}
-	
 	
 	
 	enum Phase: Int {
