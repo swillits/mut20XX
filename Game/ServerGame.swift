@@ -1,8 +1,7 @@
 //
-//  Server.swift
-//  Project
+//  ServerGame.swift
+//  MUT20XX
 //
-//  Created by Seth Willits on 1/29/17.
 //  Copyright © 2017 iDevGames. All rights reserved.
 //
 
@@ -16,16 +15,6 @@ class ServerGame: NetConnectionDelegate {
 	private var idForNextClient = 1
 	private var serverConnection: NetConnection! = nil
 	fileprivate var gameState = GameState()
-	
-	
-	enum DropReason: Int {
-		case serverIsFull = 1
-		case serverShuttingDown = 2
-		case gameInProgress = 3
-		case clientLost = 4
-		case playerNameNotUnique = 5
-		case playerNameInvalid = 6
-	}
 	
 	
 	
@@ -99,7 +88,7 @@ class ServerGame: NetConnectionDelegate {
 	}
 	
 	
-	fileprivate func dropClient(_ client: ServerClient, reason: DropReason) {
+	fileprivate func dropClient(_ client: ServerClient, reason: NetMessage.DropReason) {
 		send(message: messageForDroppingConnection(reason: reason), to: client)
 		client.connection.disconnectAfterWriting()
 		removeClient(for: client.connection)
@@ -263,7 +252,7 @@ extension ServerGame {
 		}
 		
 		
-		var rejectionReason: ServerGame.DropReason? = nil
+		var rejectionReason: NetMessage.DropReason? = nil
 		
 		
 		// -- Read Message --
@@ -465,7 +454,7 @@ extension ServerGame {
 	
 	// MARK: - Outgoing
 	
-	fileprivate func messageForDroppingConnection(reason: ServerGame.DropReason) -> NetMessage {
+	fileprivate func messageForDroppingConnection(reason: NetMessage.DropReason) -> NetMessage {
 		let msg = NetMessage(type: NetMessage.MsgType.playerConnection, subtype: NetMessage.PlayerConnectionSubtype.denied)
 		msg.write(int8: Int8(reason.rawValue))
 		return msg

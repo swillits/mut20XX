@@ -25,7 +25,6 @@ class GameSinglePlayerScene: SKScene {
 		boardNode = bgNode.childNode(withName: "PlayerBoard") as! BoardNode
 		
 		lastUpdateTime = 0
-		game.newGame()
 		game.start()
 	}
 	

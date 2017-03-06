@@ -14,9 +14,9 @@
 		5D526BA51E622E62009C057E /* NetMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D526BA41E622E62009C057E /* NetMessage.swift */; };
 		5D526BA71E6232C2009C057E /* BinaryStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D526BA61E6232C2009C057E /* BinaryStream.swift */; };
 		5D526BA91E6232D1009C057E /* BinaryStreamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D526BA81E6232D0009C057E /* BinaryStreamTests.swift */; };
+		5D52BDAF1E6D13630018BF76 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D52BDAE1E6D13630018BF76 /* Game.swift */; };
 		5D849A801E3BB1260027AF00 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849A7F1E3BB1260027AF00 /* AppDelegate.swift */; };
 		5D849A821E3BB1260027AF00 /* GameSinglePlayerScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5D849A811E3BB1260027AF00 /* GameSinglePlayerScene.sks */; };
-		5D849A841E3BB1260027AF00 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5D849A831E3BB1260027AF00 /* Actions.sks */; };
 		5D849A861E3BB1260027AF00 /* GameSinglePlayerScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849A851E3BB1260027AF00 /* GameSinglePlayerScene.swift */; };
 		5D849A881E3BB1260027AF00 /* SceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849A871E3BB1260027AF00 /* SceneViewController.swift */; };
 		5D849A8A1E3BB1260027AF00 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D849A891E3BB1260027AF00 /* Assets.xcassets */; };
@@ -25,7 +25,7 @@
 		5D849AA81E3BB22F0027AF00 /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AA71E3BB22F0027AF00 /* Piece.swift */; };
 		5D849AAA1E3BB5700027AF00 /* OccupancyMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AA91E3BB5700027AF00 /* OccupancyMap.swift */; };
 		5D849AAC1E3BB71B0027AF00 /* ShapeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AAB1E3BB71B0027AF00 /* ShapeGenerator.swift */; };
-		5D849AAF1E3BB7A40027AF00 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AAE1E3BB7A40027AF00 /* Game.swift */; };
+		5D849AAF1E3BB7A40027AF00 /* ClientGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AAE1E3BB7A40027AF00 /* ClientGame.swift */; };
 		5D849AB21E3BB7DE0027AF00 /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB11E3BB7DE0027AF00 /* Input.swift */; };
 		5D849AB41E3BB8080027AF00 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB31E3BB8080027AF00 /* Player.swift */; };
 		5D849AB61E3BC7180027AF00 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AB51E3BC7180027AF00 /* Audio.swift */; };
@@ -46,9 +46,7 @@
 		5D849ADB1E3BE6100027AF00 /* TetrisMusic2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ACB1E3BE6100027AF00 /* TetrisMusic2.m4a */; };
 		5D849ADC1E3BE6100027AF00 /* TetrisMusic3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ACC1E3BE6100027AF00 /* TetrisMusic3.m4a */; };
 		5D849ADD1E3BE6100027AF00 /* WonGame.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D849ACD1E3BE6100027AF00 /* WonGame.m4a */; };
-		5D849AE21E3E9F420027AF00 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AE11E3E9F420027AF00 /* Server.swift */; };
-		5D849AE41E3E9F490027AF00 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AE31E3E9F490027AF00 /* Client.swift */; };
-		5D849AE61E3E9F560027AF00 /* Communication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AE51E3E9F560027AF00 /* Communication.swift */; };
+		5D849AE21E3E9F420027AF00 /* ServerGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D849AE11E3E9F420027AF00 /* ServerGame.swift */; };
 		5DA8C2F01E59368000C33D23 /* BoardNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8C2EF1E59368000C33D23 /* BoardNode.swift */; };
 		5DA8C2F21E5936A900C33D23 /* BlockNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8C2F11E5936A900C33D23 /* BlockNode.swift */; };
 		5DA8C2F41E5936CF00C33D23 /* ShapeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8C2F31E5936CF00C33D23 /* ShapeNode.swift */; };
@@ -88,10 +86,10 @@
 		5D526BA41E622E62009C057E /* NetMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetMessage.swift; sourceTree = "<group>"; };
 		5D526BA61E6232C2009C057E /* BinaryStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BinaryStream.swift; sourceTree = "<group>"; };
 		5D526BA81E6232D0009C057E /* BinaryStreamTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BinaryStreamTests.swift; sourceTree = "<group>"; };
+		5D52BDAE1E6D13630018BF76 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		5D849A7C1E3BB1260027AF00 /* MUT20XX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MUT20XX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D849A7F1E3BB1260027AF00 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Game/AppDelegate.swift; sourceTree = "<group>"; };
 		5D849A811E3BB1260027AF00 /* GameSinglePlayerScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSinglePlayerScene.sks; sourceTree = "<group>"; };
-		5D849A831E3BB1260027AF00 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
 		5D849A851E3BB1260027AF00 /* GameSinglePlayerScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSinglePlayerScene.swift; sourceTree = "<group>"; };
 		5D849A871E3BB1260027AF00 /* SceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneViewController.swift; path = Game/SceneViewController.swift; sourceTree = "<group>"; };
 		5D849A891E3BB1260027AF00 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Game/Assets.xcassets; sourceTree = "<group>"; };
@@ -103,7 +101,7 @@
 		5D849AA71E3BB22F0027AF00 /* Piece.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Piece.swift; sourceTree = "<group>"; };
 		5D849AA91E3BB5700027AF00 /* OccupancyMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OccupancyMap.swift; sourceTree = "<group>"; };
 		5D849AAB1E3BB71B0027AF00 /* ShapeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShapeGenerator.swift; sourceTree = "<group>"; };
-		5D849AAE1E3BB7A40027AF00 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		5D849AAE1E3BB7A40027AF00 /* ClientGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientGame.swift; sourceTree = "<group>"; };
 		5D849AB11E3BB7DE0027AF00 /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		5D849AB31E3BB8080027AF00 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		5D849AB51E3BC7180027AF00 /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
@@ -125,9 +123,7 @@
 		5D849ACB1E3BE6100027AF00 /* TetrisMusic2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = TetrisMusic2.m4a; sourceTree = "<group>"; };
 		5D849ACC1E3BE6100027AF00 /* TetrisMusic3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = TetrisMusic3.m4a; sourceTree = "<group>"; };
 		5D849ACD1E3BE6100027AF00 /* WonGame.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = WonGame.m4a; sourceTree = "<group>"; };
-		5D849AE11E3E9F420027AF00 /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Server.swift; path = Game/Server.swift; sourceTree = SOURCE_ROOT; };
-		5D849AE31E3E9F490027AF00 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Client.swift; path = Game/Client.swift; sourceTree = SOURCE_ROOT; };
-		5D849AE51E3E9F560027AF00 /* Communication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Communication.swift; path = Game/Communication.swift; sourceTree = SOURCE_ROOT; };
+		5D849AE11E3E9F420027AF00 /* ServerGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServerGame.swift; path = Game/ServerGame.swift; sourceTree = SOURCE_ROOT; };
 		5DA8C2EF1E59368000C33D23 /* BoardNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardNode.swift; sourceTree = "<group>"; };
 		5DA8C2F11E5936A900C33D23 /* BlockNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockNode.swift; sourceTree = "<group>"; };
 		5DA8C2F31E5936CF00C33D23 /* ShapeNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShapeNode.swift; sourceTree = "<group>"; };
@@ -204,7 +200,6 @@
 			children = (
 				5DF95A341E59274000F2817A /* MainMenuScene.sks */,
 				5D849A811E3BB1260027AF00 /* GameSinglePlayerScene.sks */,
-				5D849A831E3BB1260027AF00 /* Actions.sks */,
 				5DF95A361E59278900F2817A /* MainMenuScene.swift */,
 				5D849A851E3BB1260027AF00 /* GameSinglePlayerScene.swift */,
 				5DA8C2EF1E59368000C33D23 /* BoardNode.swift */,
@@ -230,7 +225,7 @@
 		5D849AA21E3BB1A50027AF00 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5D849AAE1E3BB7A40027AF00 /* Game.swift */,
+				5D52BDAE1E6D13630018BF76 /* Game.swift */,
 				5D849AB31E3BB8080027AF00 /* Player.swift */,
 				5D849AA51E3BB2180027AF00 /* Board.swift */,
 				5D849AA71E3BB22F0027AF00 /* Piece.swift */,
@@ -270,9 +265,8 @@
 		5D849AAD1E3BB78E0027AF00 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				5D849AE11E3E9F420027AF00 /* Server.swift */,
-				5D849AE31E3E9F490027AF00 /* Client.swift */,
-				5D849AE51E3E9F560027AF00 /* Communication.swift */,
+				5D849AAE1E3BB7A40027AF00 /* ClientGame.swift */,
+				5D849AE11E3E9F420027AF00 /* ServerGame.swift */,
 				5D526BA01E622E4E009C057E /* NetConnection.swift */,
 				5D526BA41E622E62009C057E /* NetMessage.swift */,
 				5D526BA61E6232C2009C057E /* BinaryStream.swift */,
@@ -433,7 +427,6 @@
 				5DD129901E6378BA001FFDC0 /* HostGameViewController.xib in Resources */,
 				5D849ACF1E3BE6100027AF00 /* ButtonHover.m4a in Resources */,
 				5DF95A331E58E6CF00F2817A /* SceneViewController.xib in Resources */,
-				5D849A841E3BB1260027AF00 /* Actions.sks in Resources */,
 				5D849AD81E3BE6100027AF00 /* RotateBlock.m4a in Resources */,
 				5D849AD71E3BE6100027AF00 /* NewLevel.m4a in Resources */,
 				5D849AD11E3BE6100027AF00 /* CompleteFourLines.m4a in Resources */,
@@ -463,12 +456,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DF95A371E59278900F2817A /* MainMenuScene.swift in Sources */,
+				5D52BDAF1E6D13630018BF76 /* Game.swift in Sources */,
 				5D849A881E3BB1260027AF00 /* SceneViewController.swift in Sources */,
 				5DD129981E6388C7001FFDC0 /* Preferences.swift in Sources */,
 				5DD1298F1E6378BA001FFDC0 /* HostGameViewController.swift in Sources */,
 				5D526BA71E6232C2009C057E /* BinaryStream.swift in Sources */,
 				5D849A861E3BB1260027AF00 /* GameSinglePlayerScene.swift in Sources */,
-				5D849AE61E3E9F560027AF00 /* Communication.swift in Sources */,
 				5D526B9F1E622DF0009C057E /* GCDAsyncUdpSocket.m in Sources */,
 				5D849AB61E3BC7180027AF00 /* Audio.swift in Sources */,
 				5DD129961E638083001FFDC0 /* Dialog.swift in Sources */,
@@ -480,7 +473,6 @@
 				5D849AA61E3BB2180027AF00 /* Board.swift in Sources */,
 				5DA8C2F01E59368000C33D23 /* BoardNode.swift in Sources */,
 				5DA8C2F41E5936CF00C33D23 /* ShapeNode.swift in Sources */,
-				5D849AE41E3E9F490027AF00 /* Client.swift in Sources */,
 				5D526B9E1E622DF0009C057E /* GCDAsyncSocket.m in Sources */,
 				5D849AAC1E3BB71B0027AF00 /* ShapeGenerator.swift in Sources */,
 				5D849AB21E3BB7DE0027AF00 /* Input.swift in Sources */,
@@ -489,8 +481,8 @@
 				5D526BA11E622E4E009C057E /* NetConnection.swift in Sources */,
 				5D849AB41E3BB8080027AF00 /* Player.swift in Sources */,
 				5DF95A391E592B9400F2817A /* ButtonNode.swift in Sources */,
-				5D849AE21E3E9F420027AF00 /* Server.swift in Sources */,
-				5D849AAF1E3BB7A40027AF00 /* Game.swift in Sources */,
+				5D849AE21E3E9F420027AF00 /* ServerGame.swift in Sources */,
+				5D849AAF1E3BB7A40027AF00 /* ClientGame.swift in Sources */,
 				5DF95A3B1E5933A700F2817A /* Keycodes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,7 +9,7 @@ import Foundation
 
 
 
-struct Player {
+class Player {
 	var clientID: ClientID
 	var name: String
 	

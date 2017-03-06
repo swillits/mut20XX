@@ -66,7 +66,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		
 		// Maybe not have a shared instance ...
 		client = ClientGame()
-		client!.newGame()
 		
 		
 		// TODO: in the future, perhaps this join method should have a handler as well.

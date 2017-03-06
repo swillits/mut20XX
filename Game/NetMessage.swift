@@ -53,6 +53,16 @@ class NetMessage {
 	}
 	
 	
+	enum DropReason: Int {
+		case serverIsFull = 1
+		case serverShuttingDown = 2
+		case gameInProgress = 3
+		case clientLost = 4
+		case playerNameNotUnique = 5
+		case playerNameInvalid = 6
+	}
+	
+	
 	// =================================================================================
 	// MARK: -
 	

@@ -27,7 +27,7 @@ struct Piece {
 	
 	
 	
-	enum Shape {
+	enum Shape: Int {
 		// standard piece names (see wikipedia)
 		// uppercase in defiance of swift convention
 		// because the names make no sense in lowercase
