@@ -78,9 +78,9 @@ class BinaryStream {
 	
 	
 	func readData(length readLength: Int) throws -> Data {
-		var data = Data(count: length)
+		var data = Data(count: readLength)
 		try data.withUnsafeMutableBytes { (pointer: UnsafeMutablePointer<Int8>)  in
-			try destination.read(bytes: pointer, length: length)
+			try destination.read(bytes: pointer, length: readLength)
 		}
 		return data
 	}
