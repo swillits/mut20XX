@@ -19,6 +19,16 @@ class NetMessage {
 		static let game = 4
 //		static let clientMessage = 4
 //		static let generic = 5
+		
+		static func string(_ type: Int) -> String {
+			switch type {
+			case MsgType.playerConnection: return "playerConnection"
+			case MsgType.general:          return "general"
+			case MsgType.lobby:            return "lobby"
+			case MsgType.game:             return "game"
+			default: return "\(type)"
+			}
+		}
 	}
 	
 	
@@ -26,15 +36,38 @@ class NetMessage {
 		static let request = 1
 		static let granted = 2
 		static let denied  = 3
+		
+		static func string(_ type: Int) -> String {
+			switch type {
+			case PlayerConnectionSubtype.request: return "request"
+			case PlayerConnectionSubtype.granted: return "granted"
+			case PlayerConnectionSubtype.denied:  return "denied"
+			default: return "\(type)"
+			}
+		}
 	}
 	
 	struct GeneralSubtype {
 		static let playersInfo = 1
+		
+		static func string(_ type: Int) -> String {
+			switch type {
+			case GeneralSubtype.playersInfo: return "playersInfo"
+			default: return "\(type)"
+			}
+		}
 	}
 	
 	struct LobbySubtype {
 		static let changedReady = 1
 		//hostRequestsStart// host client -> server
+		
+		static func string(_ type: Int) -> String {
+			switch type {
+			case LobbySubtype.changedReady: return "changedReady"
+			default: return "\(type)"
+			}
+		}
 	}
 	
 	struct GameSubtype {
@@ -50,6 +83,22 @@ class NetMessage {
 		static let transferRows = 9
 		
 		static let returnToLobby = 10
+		
+		static func string(_ type: Int) -> String {
+			switch type {
+			case GameSubtype.prepare:       return "prepare"
+			case GameSubtype.isPrepared:    return "isPrepared"
+			case GameSubtype.start:         return "start"
+			case GameSubtype.gameOver:      return "gameOver"
+			case GameSubtype.playerDied:    return "playerDied"
+			case GameSubtype.shapes:        return "shapes"
+			case GameSubtype.embedShape:    return "embedShape"
+			case GameSubtype.completedRows: return "completedRows"
+			case GameSubtype.transferRows:  return "transferRows"
+			case GameSubtype.returnToLobby: return "returnToLobby"
+			default: return "\(type)"
+			}
+		}
 	}
 	
 	
@@ -60,6 +109,17 @@ class NetMessage {
 		case clientLost = 4
 		case playerNameNotUnique = 5
 		case playerNameInvalid = 6
+		
+		var string: String {
+			switch self {
+			case .serverIsFull:         return "serverIsFull"
+			case .serverShuttingDown:   return "serverShuttingDown"
+			case .gameInProgress:       return "gameInProgress"
+			case .clientLost:           return "clientLost"
+			case .playerNameNotUnique:  return "playerNameNotUnique"
+			case .playerNameInvalid:    return "playerNameInvalid"
+			}
+		}
 	}
 	
 	
@@ -75,6 +135,17 @@ class NetMessage {
 	
 	var type: Int
 	var subtype: Int
+	
+	var debugType: String {
+		switch type {
+		case MsgType.playerConnection: return "\(MsgType.string(type)).\(PlayerConnectionSubtype.string(subtype))" 
+		case MsgType.general:          return "\(MsgType.string(type)).\(GeneralSubtype.string(subtype))"
+		case MsgType.lobby:            return "\(MsgType.string(type)).\(LobbySubtype.string(subtype))"
+		case MsgType.game:             return "\(MsgType.string(type)).\(GameSubtype.string(subtype))"
+		default: return "\(type).\(subtype)"
+		}
+	}
+	
 	
 	
 	init(type: Int, subtype: Int) {

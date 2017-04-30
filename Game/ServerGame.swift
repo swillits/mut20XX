@@ -96,6 +96,7 @@ class ServerGame: NetConnectionDelegate {
 	
 	
 	fileprivate func send(message: NetMessage, to client: ServerClient) {
+		print("[Server] Sending: \(message.debugType) to \(client.clientID)")
 		client.connection.write(NetPacket(number: 0, payload: message.data()))
 	}
 	
@@ -211,6 +212,7 @@ extension ServerGame {
 	fileprivate func process(packets: [NetPacket], client: ServerClient) {		
 		for packet in packets {
 			let message = NetMessage(data: packet.payload)
+			print("[Server] Receiving: \(message.debugType) from \(client.clientID)")
 			
 			switch (message.type, message.subtype) {
 			case (NetMessage.MsgType.playerConnection, NetMessage.PlayerConnectionSubtype.request):

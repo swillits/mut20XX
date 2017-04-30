@@ -17,11 +17,12 @@ protocol ButtonNodeResponderType: class {
 /// The complete set of button identifiers supported in the app.
 enum ButtonIdentifier: String {
 	case quit = "Quit"
-	case newTestGame = "NewTestGame"
+	case mainMenuHostGame = "MainMenuHostGame"
+	case mainMenuJoinGame = "MainMenuJoinGame"
 	
 	/// Convenience array of all available button identifiers.
 	static let allButtonIdentifiers: [ButtonIdentifier] = [
-		.quit, .newTestGame
+		.quit, .mainMenuHostGame, .mainMenuJoinGame
 	]
 	
 	/// The name of the texture to use for a button when the button is selected.

@@ -57,8 +57,9 @@ class ClientGame: NetConnectionDelegate {
 	}
 	
 	
-	func connect(to serverAddress: String, port: UInt16, playerName: String, handler: (Error?) -> ()) {
+	func connect(to serverAddress: String, port: UInt16, playerName: String, handler: @escaping (Error?) -> ()) {
 		connection.delegate = self
+		connectHandler = handler
 		try! connection.connect(host: serverAddress, port: port, timeout: 10.0)
 	}
 	
@@ -71,7 +72,7 @@ class ClientGame: NetConnectionDelegate {
 		
 		// TODO ... go back to previous scene
 		// display reasonToDisplay
-		// [[GBSceneManager sharedManager] popScene // ??
+		// GameManager.shared.showMainMenu() ?
 	}
 
 	
@@ -346,6 +347,7 @@ extension ClientGame {
 	// MARK: - Outgoing
 	
 	fileprivate func send(_ message: NetMessage) {
+		print("[Client] Sending: \(message.debugType)")
 		connection.write(NetPacket(number: 0, payload: message.data()))
 	}
 	
@@ -425,8 +427,8 @@ extension ClientGame {
 
 	fileprivate func process(packets: [NetPacket]) {
 		for packet in packets {
-			//print("[Client] Received packet: %@", packet)
 			let msg = NetMessage(data: packet.payload)
+			print("[Client] Receiving: \(msg.debugType)")
 			
 			switch (msg.type, msg.subtype) {
 			case (NetMessage.MsgType.playerConnection, _):
@@ -636,7 +638,7 @@ extension ClientGame {
 
 
 	fileprivate func handle_returnToLobby(_ msg: NetMessage) {
-		// TODO: pop scene
+		GameManager.shared.showLobby()
 		
 		//gameState.localPlayer.isReady = NO;
 		//gameState.localPlayer.isAlive = NO;
