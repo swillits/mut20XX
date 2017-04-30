@@ -135,7 +135,7 @@ class ButtonNode: SKSpriteNode {
 
 		// Ensure that the node has a supported button identifier as its name.
 		guard let nodeName = name, let buttonIdentifier = ButtonIdentifier(rawValue: nodeName) else {
-			fatalError("Unsupported button name \(name) found.")
+			fatalError("Unsupported button name \(String(describing: name)) found.")
 		}
 		self.buttonIdentifier = buttonIdentifier
 

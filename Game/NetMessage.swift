@@ -68,8 +68,10 @@ class NetMessage {
 	
 	private var isWritable: Bool
 	
-	private let dd: BinaryStream.DataDestination
-	private let bs: BinaryStream
+	private let _data: NSMutableData
+	private let dd: BinaryStream.MutableMemoryDestination
+	private let bs: BinaryStream!
+	private let mbs: MutableBinaryStream!
 	
 	var type: Int
 	var subtype: Int
@@ -80,9 +82,11 @@ class NetMessage {
 		self.subtype = subtype
 		
 		isWritable = true
-		dd = BinaryStream.DataDestination()
-		bs = BinaryStream(destination: dd)
-		bs.littleEndian = true
+		_data = NSMutableData()
+		dd = BinaryStream.MutableMemoryDestination(data: _data, resizable: true)
+		mbs = MutableBinaryStream(destination: dd)
+		mbs.littleEndian = true
+		bs = mbs
 		
 		write(int16: Int16(type))
 		write(int16: Int16(subtype))
@@ -91,9 +95,11 @@ class NetMessage {
 	
 	init(data: Data) {
 		isWritable = false
-		dd = BinaryStream.DataDestination(data: data as NSData)
+		_data = NSMutableData(data: data)
+		dd = BinaryStream.MutableMemoryDestination(data: _data, resizable: false)
 		bs = BinaryStream(destination: dd)
 		bs.littleEndian = true
+		mbs = nil
 		
 		type = Int(try! bs.readInt16())
 		subtype = Int(try! bs.readInt16())
@@ -105,97 +111,97 @@ class NetMessage {
 	// MARK: - Writing
 	
 	func data() -> Data {
-		return dd.data as Data
+		return _data as Data
 	}
 	
 	
 	func write(data: Data) {
 		precondition(isWritable)
-		try! bs.write(data: data)
+		try! mbs.write(data: data)
 	}
 	
 	
 	func write(float32 value: Float32) {
 		precondition(isWritable)
-		try! bs.write(float32: value)
+		try! mbs.write(float32: value)
 	}
 	
 	
 	func write(float64 value: Float64) {
 		precondition(isWritable)
-		try! bs.write(float64: value)
+		try! mbs.write(float64: value)
 	}
 	
 	
 	func write(bool value: Bool) {
 		precondition(isWritable)
-		try! bs.write(bool: value)
+		try! mbs.write(bool: value)
 	}
 	
 	
 	func write(uint8 value: UInt8) {
 		precondition(isWritable)
-		try! bs.write(uint8: value)
+		try! mbs.write(uint8: value)
 	}
 	
 	
 	func write(uint16 value: UInt16) {
 		precondition(isWritable)
-		try! bs.write(uint16: value)
+		try! mbs.write(uint16: value)
 	}
 	
 	
 	func write(uint24 value: UInt32) {
 		precondition(isWritable)
-		try! bs.write(uint24: value)
+		try! mbs.write(uint24: value)
 	}
 	
 	
 	func write(uint32 value: UInt32) {
 		precondition(isWritable)
-		try! bs.write(uint32: value)
+		try! mbs.write(uint32: value)
 	}
 	
 	
 	func write(uint64 value: UInt64) {
 		precondition(isWritable)
-		try! bs.write(uint64: value)
+		try! mbs.write(uint64: value)
 	}
 	
 	
 	func write(int8 value: Int8) {
 		precondition(isWritable)
-		try! bs.write(int8: value)
+		try! mbs.write(int8: value)
 	}
 	
 	
 	func write(int16 value: Int16) {
 		precondition(isWritable)
-		try! bs.write(int16: value)
+		try! mbs.write(int16: value)
 	}
 	
 	
 	func write(int24 value: Int32) {
 		precondition(isWritable)
-		try! bs.write(int24: value)
+		try! mbs.write(int24: value)
 	}
 	
 	
 	func write(int32 value: Int32) {
 		precondition(isWritable)
-		try! bs.write(int32: value)
+		try! mbs.write(int32: value)
 	}
 	
 	
 	func write(int64 value: Int64) {
 		precondition(isWritable)
-		try! bs.write(int64: value)
+		try! mbs.write(int64: value)
 	}
 	
 	
 	func write(string: String) {
 		precondition(isWritable)
-		try! bs.writeUTF8String(string)
+		try! mbs.writeUTF8String(string)
 	}
 	
 	
@@ -204,7 +210,7 @@ class NetMessage {
 	
 	func readData(length: UInt64) -> Data {
 		precondition(!isWritable)
-		return try! bs.readData(length: length)
+		return try! bs.readData(length: Int(length))
 	}
 	
 	

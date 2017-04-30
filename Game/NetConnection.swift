@@ -51,7 +51,7 @@ class NetConnection: NSObject, GCDAsyncSocketDelegate {
 	
 	
 	override var description: String {
-		return "<NetConnection {\(socket.connectedHost):\(socket.connectedPort)}>"
+		return "<NetConnection {\(String(describing: socket.connectedHost)):\(socket.connectedPort)}>"
 	}
 	
 	
@@ -179,8 +179,8 @@ class NetConnection: NSObject, GCDAsyncSocketDelegate {
 	private let NetPacketHeaderSize = 12 
 	
 	private func headerData(for packet: NetPacket) -> Data {
-		let dd = BinaryStream.DataDestination()
-		let bs = BinaryStream(destination: dd)
+		let dd = BinaryStream.MutableMemoryDestination(data: NSMutableData(), resizable: true)
+		let bs = MutableBinaryStream(destination: dd)
 		bs.littleEndian = true
 		
 		try! bs.write(uint32: NetPacketMagic)
@@ -199,7 +199,7 @@ class NetConnection: NSObject, GCDAsyncSocketDelegate {
 		// <check the 'magic' header field to verify this actually a packet, otherwise
 		//  we need to skip until we find 'magic' ??>
 		
-		let dd = BinaryStream.DataDestination(data: readBuffer as NSData)
+		let dd = BinaryStream.MemoryDestination(data: readBuffer as NSData)
 		let bs = BinaryStream(destination: dd)
 		
 		let readBufferLength = readBuffer.length
@@ -225,7 +225,7 @@ class NetConnection: NSObject, GCDAsyncSocketDelegate {
 			}
 			
 			// Read the packet
-			let payload = try! bs.readData(length: UInt64(payloadSize))
+			let payload = try! bs.readData(length: Int(payloadSize))
 			let packet = NetPacket(number: Int(packetNumber), payload: payload) 
 			foundPacket(packet)
 			
