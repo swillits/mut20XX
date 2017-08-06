@@ -163,23 +163,26 @@ class ServerGame: NetConnectionDelegate {
 		
 		// Game Over
 		// -----------------------------------------
-//		if (mGamePhase == ServerGamePhaseGameOver) {
-//			if (GBGetCurrentTime() - mStartOfGameOver > 5.0) {
-//				
-//				// Go back to the lobby
-//				mGamePhase = ServerGamePhaseLobby;
-//				
-//				for (ServerClient * client in self.players) {
-//					client.isReady = NO;
-//					[self sendMessage:[self messageToReturnToLobby] toClient:client];
-//				}
-//				
-//				GBNetMessage * msg = [self messageWithAllPlayersInfo];
-//				for (ServerClient * client in self.players) {
-//					[self sendMessage:msg toClient:client];
-//				}
-//			}
-//		}
+		if gameState.phase == .gameOver {
+			
+			// Let the game sit in the gameOver phase for 5 seconds before returning to the lobby
+			if (now - gameState.startTimeOfGameOver > 5.0) {
+				
+				// Go back to the lobby
+				gameState.phase = .lobby
+				
+				// Reset player readiness for the next game
+				for client in players() {
+					client.player.isReady = false
+				}
+				
+				let playerInfoMsg = messageWithAllPlayersInfo()
+				for client in players() {
+					send(message: messageToReturnToLobby(), to: client)
+					send(message: playerInfoMsg, to: client)
+				}
+			}
+		}
 	}
 	
 }
