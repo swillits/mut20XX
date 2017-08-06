@@ -35,7 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBAction func hostGame(_ sender: AnyObject?) {
 		let hgvc = hostGameViewController
 		let dialog = Dialog(contentViewController: hgvc)
-		if dialog.runModal() == NSModalResponseOK {
+		if dialog.runModal() == NSApplication.ModalResponse.OK.rawValue {
 			let port = hgvc.serverPortField.integerValue
 			let playerName = hgvc.playerNameField.stringValue
 			GameManager.shared.hostGame(port: port, playerName: playerName) 

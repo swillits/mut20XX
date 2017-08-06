@@ -15,8 +15,8 @@ class HostGameViewController: NSViewController {
 	
 	var result: Bool = false
 	
-	override var nibName: String? {
-		return "HostGameViewController"
+	override var nibName: NSNib.Name? {
+		return NSNib.Name("HostGameViewController")
 	}
 	
 	override func viewDidLoad() {
@@ -35,12 +35,12 @@ class HostGameViewController: NSViewController {
 	@IBAction func hostGame(_ sender: AnyObject?) {
 		Prefs.playerName.value = playerNameField.stringValue
 		Prefs.serverPort.value = serverPortField.integerValue
-		dialog?.stop(NSModalResponseOK)
+		dialog?.stop(.OK)
 	}
 	
 	
 	@IBAction func cancelAction(_ sender: AnyObject?) {
-		dialog?.stop(NSModalResponseCancel)
+		dialog?.stop(.cancel)
 	}
 	
 	

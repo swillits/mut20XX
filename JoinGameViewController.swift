@@ -9,8 +9,8 @@ import Cocoa
 
 class JoinGameViewController: NSViewController {
 	
-	override var nibName: String? {
-		return "JoinGameViewController"
+	override var nibName: NSNib.Name? {
+		return NSNib.Name("JoinGameViewController")
 	}
 	
 	override func viewDidAppear() {

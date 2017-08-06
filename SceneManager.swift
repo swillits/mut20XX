@@ -62,7 +62,7 @@ class GameManager {
 		// disable the Connect/Join button...
 		client!.connect(to: host, port: port, playerName: playerName) { (error: Error?) in
 			if let error = error {
-				NSBeep()
+				NSSound.beep()
 				print("\(error)")
 				self.client = nil
 				GameManager.shared.showMainMenu()
